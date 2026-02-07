@@ -240,6 +240,56 @@ body {
   animation: gradient-text-flow 8s ease infinite;
 }
 
+/* Animated gradient text — pure white ↔ near-white shimmer (for ":FE SPOT") */
+.gradient-text-animated-white {
+  background: linear-gradient(
+    90deg,
+    #ffffff,
+    #f5f5f4,
+    #ffffff,
+    #f5f5f4,
+    #ffffff
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-text-flow 8s ease infinite;
+}
+
+/* Light mode override — dark text shimmer */
+:root:not(.dark) .gradient-text-animated-white {
+  background: linear-gradient(
+    90deg,
+    #1c1917,
+    #57534e,
+    #1c1917,
+    #57534e,
+    #1c1917
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animated gradient text — light grey ↔ stone shimmer (for subtitle "Spot") */
+.gradient-text-animated-subtle {
+  background: linear-gradient(
+    90deg,
+    #a8a29e,
+    #78716c,
+    #a8a29e,
+    #78716c,
+    #a8a29e
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-text-flow 8s ease infinite;
+}
+
 /* Steam animation for coffee cup toggle */
 @keyframes steam-rise {
   0% {

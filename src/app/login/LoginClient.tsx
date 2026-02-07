@@ -84,10 +84,7 @@ export function LoginClient() {
           {/* Brand */}
           <div className="mb-8 text-center">
             <Link href="/" className="mb-6 inline-flex flex-col items-center">
-              <Logo className="text-2xl" />
-              <span className="mt-0.5 text-[0.5rem] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-stone-500">
-                <span className="gradient-text-animated">CLAW</span> Federation : <span className="gradient-text-animated">Coffee</span> Spot
-              </span>
+              <Logo className="text-2xl" showSubtitle />
             </Link>
             <h1 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
               Welcome back!

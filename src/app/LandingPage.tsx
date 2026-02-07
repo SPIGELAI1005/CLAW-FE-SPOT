@@ -39,7 +39,7 @@ export function LandingPage() {
       {/* ─── Navigation ─────────────────────────────────────────── */}
       <header className="fixed inset-x-0 top-0 z-50 border-b border-stone-200/50 bg-[#faf8f5]/60 backdrop-blur-xl dark:border-stone-800/50 dark:bg-stone-950/60">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6">
-          <Logo className="text-lg sm:text-xl" />
+          <Logo className="text-lg sm:text-xl" showSubtitle />
           <nav className="hidden items-center gap-8 md:flex">
             <a href="#how-it-works" className="text-sm font-medium text-stone-500 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
               How It Works
@@ -563,12 +563,7 @@ export function LandingPage() {
       <footer className="relative z-[1] border-t border-stone-200/50 py-8 sm:py-12 dark:border-stone-800/50">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-            <div className="inline-flex flex-col items-start">
-              <Logo className="text-lg" />
-              <div className="mt-0.5 w-full text-center text-[0.5rem] font-semibold uppercase leading-tight tracking-[0.22em] text-stone-400 dark:text-stone-500">
-                <span className="gradient-text-animated">CLAW</span> Federation : <span className="gradient-text-animated">Coffee</span> Spot
-              </div>
-            </div>
+            <Logo className="text-lg" showSubtitle />
             <p className="text-xs text-stone-400 dark:text-stone-600">
               &copy; {new Date().getFullYear()} CLAW:FE SPOT. Supervised AI collaboration with audited outcomes.
             </p>

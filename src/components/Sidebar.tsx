@@ -144,9 +144,9 @@ export function Sidebar() {
   return (
     <aside className="hidden h-screen w-[var(--sidebar-width)] shrink-0 flex-col bg-[var(--sidebar-bg)] md:flex" role="navigation" aria-label="Main navigation">
       {/* Brand */}
-      <div className="flex h-16 items-center px-5">
+      <div className="flex items-center px-5 pb-3 pt-4">
         <Link href="/" aria-label="Go to home page">
-          <Logo className="text-xl" />
+          <Logo className="text-xl" showSubtitle />
         </Link>
       </div>
 
