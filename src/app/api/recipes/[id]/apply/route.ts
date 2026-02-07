@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabaseServer";
+import { RecipeTemplateSchema } from "@/lib/recipeTypes";
 
 export async function POST(
   _request: Request,
@@ -34,7 +35,11 @@ export async function POST(
   const latest = (versions ?? [])[0];
   if (!latest) return NextResponse.json({ error: "Recipe has no versions" }, { status: 400 });
 
-  const t = latest.template as any;
+  const parsed = RecipeTemplateSchema.safeParse(latest.template);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid recipe template" }, { status: 400 });
+  }
+  const t = parsed.data;
 
   const { data: table, error: tableErr } = await supabase
     .from("tables")

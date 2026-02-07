@@ -11,7 +11,7 @@ function getEnv() {
 }
 
 // Keep Supabase session cookies fresh and (optionally) protect authed routes.
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const response = NextResponse.next({
     request: {
       headers: request.headers,

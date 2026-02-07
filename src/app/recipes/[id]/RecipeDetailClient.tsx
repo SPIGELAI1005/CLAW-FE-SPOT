@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import type { RecipeTemplate } from "@/lib/recipeTypes";
 
 type RecipeRow = {
   id: string;
@@ -15,11 +16,11 @@ type RecipeRow = {
 type VersionRow = {
   id: string;
   version: number;
-  template: any;
+  template: RecipeTemplate;
   created_at: string;
 };
 
-function linesFromList(list: any): string {
+function linesFromList(list: unknown): string {
   if (!Array.isArray(list)) return "";
   return list.map((x) => String(x)).join("\n");
 }

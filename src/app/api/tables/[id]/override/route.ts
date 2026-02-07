@@ -86,7 +86,7 @@ export async function POST(
 
     if (runErr) return NextResponse.json({ error: runErr.message }, { status: 500 });
 
-    const prevLog = Array.isArray(run?.log) ? (run.log as any[]) : [];
+    const prevLog = Array.isArray(run?.log) ? (run.log as unknown[]) : [];
     const nextLog = [
       ...prevLog,
       {

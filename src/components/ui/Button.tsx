@@ -25,22 +25,19 @@ export function Button(props: Props) {
         : "hover:bg-zinc-100 dark:hover:bg-zinc-900";
 
   if (props.as === "link") {
-    const { as, href, variant: _v, className, ...rest } = props;
+    const { href, className, children, ...rest } = props;
     return (
-      <Link
-        href={href}
-        className={`${base} ${styles} ${className ?? ""}`}
-        {...rest}
-      >
-        {props.children}
+      <Link href={href} className={`${base} ${styles} ${className ?? ""}`} {...rest}>
+        {children}
       </Link>
     );
   }
 
-  const { as, variant: _v, className, ...rest } = props;
+  const { className, children, ...rest } = props;
   return (
     <button className={`${base} ${styles} ${className ?? ""}`} {...rest}>
-      {props.children}
+      {children}
     </button>
   );
 }
+

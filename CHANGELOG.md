@@ -20,6 +20,7 @@ Format inspired by Keep a Changelog.
 
 ### Changed
 - Runs API now includes `log` in selections.
+- Dev server defaults to **webpack** (`next dev --webpack`) to avoid Turbopack root/lockfile inference issues in the larger workspace.
 
 ### Still missing (work to do)
 - (Optional polish) Show audit history (not just latest report)
