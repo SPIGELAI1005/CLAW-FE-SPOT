@@ -2,6 +2,8 @@ import { Suspense } from "react";
 import { LoginClient } from "./LoginClient";
 import { Logo } from "@/components/ui/Logo";
 
+export const dynamic = "force-dynamic";
+
 function LoginSkeleton() {
   return (
     <div className="relative flex min-h-screen items-center justify-center px-4">
