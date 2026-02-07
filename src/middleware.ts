@@ -3,14 +3,10 @@ import { createServerClient } from "@supabase/ssr";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rateLimit";
 import { logRequest, generateCorrelationId } from "@/lib/apiLogger";
 
-function getEnv() {
+function getEnv(): { url: string; anon: string } | null {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !anon) {
-    throw new Error(
-      "Missing NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY",
-    );
-  }
+  if (!url || !anon) return null;
   return { url, anon };
 }
 
@@ -108,9 +104,14 @@ export async function middleware(request: NextRequest) {
     response.headers.set("X-Correlation-Id", correlationId);
   }
 
-  const { url, anon } = getEnv();
+  const env = getEnv();
 
-  const supabase = createServerClient(url, anon, {
+  // If Supabase env vars are not configured, skip auth checks and pass through.
+  if (!env) {
+    return applySecurityHeaders(response);
+  }
+
+  const supabase = createServerClient(env.url, env.anon, {
     cookies: {
       getAll: () => request.cookies.getAll(),
       setAll: (cookiesToSet) => {
