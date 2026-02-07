@@ -68,9 +68,13 @@ npm test           # Run Vitest
 ## Design System
 
 - **Logo**: Text-based `Logo` component — "CLAW" in animated orange-rose gradient, ":FE SPOT" in standard text
+- **Brand subtitle**: "CLAW Federation : Coffee Spot" with gradient highlights on "CLAW" and "Coffee"
 - **Gradient highlights**: Animated shimmer (`gradient-text-animated`) on section heading accents
 - **Cards**: Frosted glass (`bg-white/[0.07]` + `backdrop-blur-[6px]`) with amber hover accents
+- **Mobile menu**: CrabCoffeeToggle — animated SVG morphing between crab (CLAW) and coffee cup (SPOT)
+- **Responsive**: Mobile-first typography and layout; all sections scale from `text-2xl` to `md:text-4xl`
 - **Landing page**: Animated canvas background, trust carousel, interactive CLI demo, Quick Start terminal
+- **Login page**: Animated background, hero-style glass container, "Back to home" pill button
 
 ## Project Structure
 

@@ -240,6 +240,37 @@ body {
   animation: gradient-text-flow 8s ease infinite;
 }
 
+/* Steam animation for coffee cup toggle */
+@keyframes steam-rise {
+  0% {
+    transform: translateY(0) scaleX(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-2px) scaleX(1.15);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(0) scaleX(1);
+    opacity: 0.6;
+  }
+}
+
+/* Mobile menu slide-in */
+@keyframes mobile-menu-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-mobile-menu-in {
+  animation: mobile-menu-in 0.3s ease-out;
+}
+
 /* Trust carousel infinite scroll */
 @keyframes scroll-left {
   0% {

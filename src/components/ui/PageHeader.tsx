@@ -8,7 +8,7 @@ export function PageHeader({ title, subtitle, children }: PageHeaderProps) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
-        <h1 className="text-xl font-bold tracking-tight text-stone-900 sm:text-2xl dark:text-stone-50">
+        <h1 className="text-lg font-bold tracking-tight text-stone-900 sm:text-xl md:text-2xl dark:text-stone-50">
           {title}
         </h1>
         {subtitle && (

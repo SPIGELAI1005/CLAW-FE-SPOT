@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { AnimatedBackground } from "@/components/background/AnimatedBackground";
 import { Logo } from "@/components/ui/Logo";
+import { CrabCoffeeToggle } from "@/components/ui/CrabCoffeeToggle";
 
 /* ================================================================
    CLAW:FE SPOT — Public Landing Page
@@ -13,6 +14,23 @@ import { Logo } from "@/components/ui/Logo";
    ================================================================ */
 
 export function LandingPage() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Close mobile menu on resize to desktop
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth >= 768) setIsMobileMenuOpen(false);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [isMobileMenuOpen]);
+
   return (
     <div className="relative min-h-screen text-stone-900 dark:text-stone-50">
       {/* Two-layer animated canvas background */}
@@ -20,8 +38,8 @@ export function LandingPage() {
 
       {/* ─── Navigation ─────────────────────────────────────────── */}
       <header className="fixed inset-x-0 top-0 z-50 border-b border-stone-200/50 bg-[#faf8f5]/60 backdrop-blur-xl dark:border-stone-800/50 dark:bg-stone-950/60">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <Logo className="text-xl" />
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6">
+          <Logo className="text-lg sm:text-xl" />
           <nav className="hidden items-center gap-8 md:flex">
             <a href="#how-it-works" className="text-sm font-medium text-stone-500 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
               How It Works
@@ -36,32 +54,82 @@ export function LandingPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/login"
-              className="text-sm font-medium text-stone-600 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-white"
+              className="hidden text-sm font-medium text-stone-600 transition-colors hover:text-stone-900 sm:block dark:text-stone-400 dark:hover:text-white"
             >
               Sign in
             </Link>
             <Link
               href="/login"
-              className="inline-flex h-10 items-center rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 px-5 text-sm font-semibold text-white shadow-md shadow-amber-500/20 transition-all hover:shadow-lg hover:shadow-amber-500/30"
+              className="hidden h-10 items-center rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 px-5 text-sm font-semibold text-white shadow-md shadow-amber-500/20 transition-all hover:shadow-lg hover:shadow-amber-500/30 sm:inline-flex"
             >
               Get Started
             </Link>
+            {/* Mobile toggle — crab ↔ coffee cup */}
+            <CrabCoffeeToggle
+              isOpen={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen((v) => !v)}
+              className="md:hidden"
+            />
           </div>
         </div>
+
+        {/* ─── Mobile dropdown menu ─── */}
+        {isMobileMenuOpen && (
+          <div className="animate-mobile-menu-in border-t border-white/10 bg-[#faf8f5]/95 backdrop-blur-2xl md:hidden dark:bg-stone-950/95">
+            <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-4">
+              <a
+                href="#how-it-works"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="rounded-xl px-4 py-3 text-base font-medium text-stone-700 transition-colors hover:bg-amber-500/10 hover:text-amber-600 dark:text-stone-200 dark:hover:text-amber-400"
+              >
+                How It Works
+              </a>
+              <a
+                href="#features"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="rounded-xl px-4 py-3 text-base font-medium text-stone-700 transition-colors hover:bg-amber-500/10 hover:text-amber-600 dark:text-stone-200 dark:hover:text-amber-400"
+              >
+                Features
+              </a>
+              <a
+                href="#security"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="rounded-xl px-4 py-3 text-base font-medium text-stone-700 transition-colors hover:bg-amber-500/10 hover:text-amber-600 dark:text-stone-200 dark:hover:text-amber-400"
+              >
+                Security
+              </a>
+              <div className="my-2 border-t border-stone-200/50 dark:border-stone-800/50" />
+              <Link
+                href="/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="rounded-xl px-4 py-3 text-base font-medium text-stone-500 transition-colors hover:bg-white/20 dark:text-stone-400"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="mt-1 flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-base font-bold text-white shadow-lg shadow-amber-500/20"
+              >
+                Get Started
+              </Link>
+            </nav>
+          </div>
+        )}
       </header>
 
       {/* ─── Hero ───────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden pt-32 pb-24 sm:pt-40 sm:pb-32">
+      <section className="relative overflow-hidden pt-24 pb-16 sm:pt-40 sm:pb-32">
 
-        <div className="relative mx-auto max-w-4xl px-6 text-center">
-          <div className="mt-[5vh] mb-6 inline-flex items-center gap-2 rounded-full border border-amber-200/60 bg-amber-50/80 px-4 py-1.5 text-xs font-semibold text-amber-800 backdrop-blur-sm dark:border-amber-800/40 dark:bg-amber-950/40 dark:text-amber-300">
+        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
+          <div className="mt-[3vh] mb-4 inline-flex items-center gap-2 rounded-full border border-amber-200/60 bg-amber-50/80 px-3 py-1 text-[10px] font-semibold text-amber-800 backdrop-blur-sm sm:mt-[5vh] sm:mb-6 sm:px-4 sm:py-1.5 sm:text-xs dark:border-amber-800/40 dark:bg-amber-950/40 dark:text-amber-300">
             <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
             Supervised AI Collaboration Platform
           </div>
 
           {/* Frosted glass hero card */}
-          <div className="rounded-3xl border border-white/[0.085] bg-white/[0.075] px-8 py-12 shadow-2xl shadow-stone-900/[0.04] ring-1 ring-white/[0.04] backdrop-blur-[3px] sm:px-12 sm:py-16 dark:border-white/[0.035] dark:bg-white/[0.02] dark:shadow-black/15">
-            <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-6xl lg:text-7xl">
+          <div className="rounded-2xl border border-white/[0.085] bg-white/[0.075] px-5 py-8 shadow-2xl shadow-stone-900/[0.04] ring-1 ring-white/[0.04] backdrop-blur-[3px] sm:rounded-3xl sm:px-12 sm:py-16 dark:border-white/[0.035] dark:bg-white/[0.02] dark:shadow-black/15">
+            <h1 className="text-3xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
             Where teams and
             <br />
             <span className="gradient-text-animated">
@@ -77,24 +145,24 @@ export function LandingPage() {
             </span>
             </h1>
 
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-stone-600 sm:text-xl dark:text-stone-300">
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-stone-600 sm:mt-6 sm:text-lg md:text-xl dark:text-stone-300">
               CLAW:FE SPOT is a supervised collaboration space where humans and AI agents
               form working groups, execute tasks, and produce{" "}
               <strong className="text-stone-800 dark:text-stone-100">enterprise-grade audited outcomes</strong> --
               all with the simplicity of a coffee spot conversation.
             </p>
 
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:mt-10 sm:flex-row sm:gap-4">
               <Link
                 href="/login"
-                className="inline-flex h-14 items-center rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 px-8 text-base font-bold text-white shadow-xl shadow-amber-500/25 transition-all hover:shadow-2xl hover:shadow-amber-500/30"
+                className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 px-6 text-sm font-bold text-white shadow-xl shadow-amber-500/25 transition-all hover:shadow-2xl hover:shadow-amber-500/30 sm:h-14 sm:w-auto sm:px-8 sm:text-base"
               >
                 Start Collaborating
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ml-2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </Link>
               <a
                 href="#how-it-works"
-                className="inline-flex h-14 items-center rounded-2xl border border-white/40 bg-white/30 px-8 text-base font-semibold text-stone-700 backdrop-blur-sm transition-all hover:border-white/60 hover:bg-white/50 hover:shadow-lg dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20"
+                className="inline-flex h-12 w-full items-center justify-center rounded-2xl border border-white/40 bg-white/30 px-6 text-sm font-semibold text-stone-700 backdrop-blur-sm transition-all hover:border-white/60 hover:bg-white/50 hover:shadow-lg sm:h-14 sm:w-auto sm:px-8 sm:text-base dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20"
               >
                 See How It Works
               </a>
@@ -114,9 +182,9 @@ export function LandingPage() {
       <div className="h-16 sm:h-24" />
 
       {/* ─── Logos / Trust bar ──────────────────────────────────── */}
-      <section className="relative overflow-x-clip border-y border-white/[0.085] bg-white/[0.075] py-10 shadow-2xl shadow-stone-900/[0.04] ring-1 ring-white/[0.04] backdrop-blur-[3px] dark:border-white/[0.035] dark:bg-white/[0.02] dark:shadow-black/15">
-        <div className="mx-auto max-w-4xl px-6 text-center">
-          <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-white/80 dark:text-white/70">
+      <section className="relative overflow-x-clip border-y border-white/[0.085] bg-white/[0.075] py-6 shadow-2xl shadow-stone-900/[0.04] ring-1 ring-white/[0.04] backdrop-blur-[3px] sm:py-10 dark:border-white/[0.035] dark:bg-white/[0.02] dark:shadow-black/15">
+        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
+          <p className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-white/80 sm:mb-6 sm:text-xs dark:text-white/70">
             Built for teams that demand trust, transparency, and certified outcomes
           </p>
         </div>
@@ -125,17 +193,17 @@ export function LandingPage() {
       </section>
 
       {/* ─── How It Works ──────────────────────────────────────── */}
-      <section id="how-it-works" className="relative z-[1] py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="mb-16 text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+      <section id="how-it-works" className="relative z-[1] py-16 sm:py-24 md:py-32">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mb-10 text-center sm:mb-16">
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
               Simple as a coffee conversation.
               <br />
               <span className="gradient-text-animated">Powerful as an enterprise audit.</span>
             </h2>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
             {[
               {
                 step: "01",
@@ -211,10 +279,10 @@ export function LandingPage() {
       </section>
 
       {/* ─── Features ──────────────────────────────────────────── */}
-      <section id="features" className="relative py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="mb-16 text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+      <section id="features" className="relative py-16 sm:py-24 md:py-32">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mb-10 text-center sm:mb-16">
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
               Everything you need for
               <br />
               <span className="gradient-text-animated">supervised AI execution.</span>
@@ -244,10 +312,10 @@ export function LandingPage() {
       <div className="h-16 sm:h-24" />
 
       {/* ─── Security ──────────────────────────────────────────── */}
-      <section id="security" className="relative py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="mb-16 text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+      <section id="security" className="relative py-16 sm:py-24 md:py-32">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mb-10 text-center sm:mb-16">
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
               <span className="gradient-text-animated">Security</span> is not a feature.
               <br />
               It&apos;s the <span className="gradient-text-animated">foundation.</span>
@@ -320,8 +388,8 @@ export function LandingPage() {
       <div className="h-10 sm:h-16" />
 
       {/* ─── CLI Showcase ────────────────────────────────────────── */}
-      <section className="relative z-[1] border-y border-white/[0.085] bg-white/[0.075] py-12 shadow-2xl shadow-stone-900/[0.04] ring-1 ring-white/[0.04] backdrop-blur-[3px] dark:border-white/[0.035] dark:bg-white/[0.02] dark:shadow-black/15">
-        <div className="mx-auto max-w-4xl px-6">
+      <section className="relative z-[1] border-y border-white/[0.085] bg-white/[0.075] py-8 shadow-2xl shadow-stone-900/[0.04] ring-1 ring-white/[0.04] backdrop-blur-[3px] sm:py-12 dark:border-white/[0.035] dark:bg-white/[0.02] dark:shadow-black/15">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
           {/* Section header */}
           <div className="mb-6 text-center">
             <p className="text-xs font-semibold uppercase tracking-widest text-white/80 dark:text-white/70">
@@ -341,19 +409,19 @@ export function LandingPage() {
       </section>
 
       {/* ─── The Three Roles ───────────────────────────────────── */}
-      <section className="relative z-[1] py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="mb-16 text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+      <section className="relative z-[1] py-16 sm:py-24 md:py-32">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mb-10 text-center sm:mb-16">
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
               Three roles. One certified outcome.
               <br />
-              <span className="gradient-text-animated">
+              <span className="gradient-text-animated text-lg sm:text-2xl md:text-3xl">
                 Independence at every layer ensures no single point of failure.
               </span>
             </h2>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
             {[
               {
                 role: "Worker Agents",
@@ -414,22 +482,22 @@ export function LandingPage() {
       </section>
 
       {/* ─── Modes ─────────────────────────────────────────────── */}
-      <section className="relative z-[1] py-24 sm:py-32">
-        <div className="mx-auto max-w-5xl px-6">
-          <div className="mb-16 text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+      <section className="relative z-[1] py-16 sm:py-24 md:py-32">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="mb-10 text-center sm:mb-16">
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
               Two modes.
               <br />
               <span className="gradient-text-animated">Clear boundaries.</span>
             </h2>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2">
-            <div className="rounded-3xl border border-white/[0.12] bg-white/[0.07] p-10 shadow-2xl shadow-stone-900/[0.06] ring-1 ring-white/[0.05] backdrop-blur-[6px] transition-all hover:border-amber-400/20 hover:bg-white/[0.1] hover:shadow-amber-500/[0.08] dark:border-white/[0.06] dark:bg-white/[0.03] dark:shadow-black/20 dark:ring-white/[0.03] dark:hover:border-amber-400/15 dark:hover:bg-white/[0.05]">
+          <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
+            <div className="rounded-2xl border border-white/[0.12] bg-white/[0.07] p-6 shadow-2xl shadow-stone-900/[0.06] ring-1 ring-white/[0.05] backdrop-blur-[6px] transition-all hover:border-amber-400/20 hover:bg-white/[0.1] hover:shadow-amber-500/[0.08] sm:rounded-3xl sm:p-10 dark:border-white/[0.06] dark:bg-white/[0.03] dark:shadow-black/20 dark:ring-white/[0.03] dark:hover:border-amber-400/15 dark:hover:bg-white/[0.05]">
               <div className="mb-4 inline-flex rounded-xl bg-sky-100 px-3 py-1.5 text-xs font-bold text-sky-700 dark:bg-sky-900/50 dark:text-sky-300">
                 DISCUSS
               </div>
-              <h3 className="mb-3 text-2xl font-bold text-white/90 dark:text-white/80">Talk freely</h3>
+              <h3 className="mb-2 text-xl font-bold text-white/90 sm:mb-3 sm:text-2xl dark:text-white/80">Talk freely</h3>
               <p className="mb-6 text-sm leading-relaxed text-white/60 dark:text-white/50">
                 Chat and voice discussion only. No tool execution, no data access beyond what&apos;s explicitly shared.
                 Perfect for brainstorming, planning, and alignment.
@@ -444,11 +512,11 @@ export function LandingPage() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-white/[0.12] bg-white/[0.07] p-10 shadow-2xl shadow-stone-900/[0.06] ring-1 ring-white/[0.05] backdrop-blur-[6px] transition-all hover:border-amber-400/20 hover:bg-white/[0.1] hover:shadow-amber-500/[0.08] dark:border-white/[0.06] dark:bg-white/[0.03] dark:shadow-black/20 dark:ring-white/[0.03] dark:hover:border-amber-400/15 dark:hover:bg-white/[0.05]">
+            <div className="rounded-2xl border border-white/[0.12] bg-white/[0.07] p-6 shadow-2xl shadow-stone-900/[0.06] ring-1 ring-white/[0.05] backdrop-blur-[6px] transition-all hover:border-amber-400/20 hover:bg-white/[0.1] hover:shadow-amber-500/[0.08] sm:rounded-3xl sm:p-10 dark:border-white/[0.06] dark:bg-white/[0.03] dark:shadow-black/20 dark:ring-white/[0.03] dark:hover:border-amber-400/15 dark:hover:bg-white/[0.05]">
               <div className="mb-4 inline-flex rounded-xl bg-amber-100 px-3 py-1.5 text-xs font-bold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
                 EXECUTE
               </div>
-              <h3 className="mb-3 text-2xl font-bold text-white/90 dark:text-white/80">Act with confidence</h3>
+              <h3 className="mb-2 text-xl font-bold text-white/90 sm:mb-3 sm:text-2xl dark:text-white/80">Act with confidence</h3>
               <p className="mb-6 text-sm leading-relaxed text-white/60 dark:text-white/50">
                 Tools allowed only via policy. L1 Auditor gates every step in real-time.
                 L2 Meta-Auditor certifies the final outcome. Every action is logged immutably.
@@ -467,21 +535,21 @@ export function LandingPage() {
       </section>
 
       {/* ─── CTA ───────────────────────────────────────────────── */}
-      <section className="relative z-[1] py-24 sm:py-32">
-        <div className="mx-auto max-w-4xl px-6 text-center">
-          <div className="rounded-3xl border border-white/[0.12] bg-white/[0.07] px-8 py-16 shadow-2xl shadow-stone-900/[0.06] ring-1 ring-white/[0.05] backdrop-blur-[6px] sm:px-16 dark:border-white/[0.06] dark:bg-white/[0.03] dark:shadow-black/20 dark:ring-white/[0.03]">
+      <section className="relative z-[1] py-16 sm:py-24 md:py-32">
+        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
+          <div className="rounded-2xl border border-white/[0.12] bg-white/[0.07] px-5 py-10 shadow-2xl shadow-stone-900/[0.06] ring-1 ring-white/[0.05] backdrop-blur-[6px] sm:rounded-3xl sm:px-16 sm:py-16 dark:border-white/[0.06] dark:bg-white/[0.03] dark:shadow-black/20 dark:ring-white/[0.03]">
             <div className="pointer-events-none absolute -top-20 left-1/2 h-40 w-[400px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-3xl" />
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
               Ready to <span className="gradient-text-animated">collaborate with confidence?</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-lg text-white/60 dark:text-white/50">
+            <p className="mx-auto mt-3 max-w-lg text-sm text-white/60 sm:mt-4 sm:text-base dark:text-white/50">
               Join teams using CLAW:FE SPOT to produce audited, certified outcomes
               with AI agents they can trust.
             </p>
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:mt-10 sm:flex-row sm:gap-4">
               <Link
                 href="/login"
-                className="inline-flex h-14 items-center rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 px-8 text-base font-bold text-white shadow-xl shadow-amber-500/25 transition-all hover:shadow-2xl hover:shadow-amber-500/30"
+                className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 px-6 text-sm font-bold text-white shadow-xl shadow-amber-500/25 transition-all hover:shadow-2xl hover:shadow-amber-500/30 sm:h-14 sm:w-auto sm:px-8 sm:text-base"
               >
                 Get Started Free
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ml-2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -492,11 +560,14 @@ export function LandingPage() {
       </section>
 
       {/* ─── Footer ────────────────────────────────────────────── */}
-      <footer className="relative z-[1] border-t border-stone-200/50 py-12 dark:border-stone-800/50">
-        <div className="mx-auto max-w-6xl px-6">
+      <footer className="relative z-[1] border-t border-stone-200/50 py-8 sm:py-12 dark:border-stone-800/50">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-            <div className="flex items-center gap-3">
+            <div className="inline-flex flex-col items-start">
               <Logo className="text-lg" />
+              <div className="mt-0.5 w-full text-center text-[0.5rem] font-semibold uppercase leading-tight tracking-[0.22em] text-stone-400 dark:text-stone-500">
+                <span className="gradient-text-animated">CLAW</span> Federation : <span className="gradient-text-animated">Coffee</span> Spot
+              </div>
             </div>
             <p className="text-xs text-stone-400 dark:text-stone-600">
               &copy; {new Date().getFullYear()} CLAW:FE SPOT. Supervised AI collaboration with audited outcomes.

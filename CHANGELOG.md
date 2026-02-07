@@ -6,6 +6,48 @@ Format inspired by Keep a Changelog.
 
 ---
 
+## [2026-02-07] Responsive Design, Mobile Menu & Login Page Redesign
+
+### Added
+- **CrabCoffeeToggle component** (`src/components/ui/CrabCoffeeToggle.tsx`)
+  - Animated SVG menu toggle that morphs between a crab (closed, representing CLAW) and a coffee cup (open, representing SPOT)
+  - Smooth 500ms CSS transitions with scale + rotation; uses the brand gradient
+  - Includes animated steam curls on the coffee cup state
+
+- **Mobile navigation menu** (landing page)
+  - Dropdown menu triggered by the CrabCoffeeToggle, visible on screens below `md:` breakpoint
+  - Slide-in animation (`animate-mobile-menu-in`), body scroll lock when open
+  - Auto-closes on resize to desktop; nav links close menu on click
+  - Includes "Sign in" and "Get Started" CTAs for mobile
+
+- **Login page redesign** (`src/app/login/page.tsx`)
+  - Added `AnimatedBackground` canvas matching the landing page
+  - "Back to home" pill button with frosted glass styling and arrow icon
+  - Login form wrapped in a hero-style frosted glass container
+  - "CLAW Federation : Coffee Spot" subtitle under the logo with gradient highlights
+  - Input field updated to translucent glass style
+
+- **CSS animations** (`globals.css`)
+  - `steam-rise` keyframes for coffee cup steam animation
+  - `mobile-menu-in` keyframes for mobile menu slide-in
+
+### Changed
+- **Responsive typography across all landing page sections**
+  - Hero: `text-3xl` base → `sm:5xl → md:6xl → lg:7xl`; smaller padding/margins on mobile
+  - All section headings: `text-2xl` base → `sm:3xl → md:4xl`
+  - Section padding: `py-16` mobile → `sm:py-24` → `md:py-32`; `px-4` mobile → `sm:px-6`
+  - Cards: `rounded-2xl p-6` mobile → `sm:rounded-3xl sm:p-10`
+  - Buttons: full-width on mobile, auto-width on `sm:`
+  - Header: `h-14` mobile → `sm:h-16`; Sign in/Get Started hidden on mobile (in menu)
+  - Three Roles subtitle: responsive text sizing for long gradient line
+  - Trust bar: smaller text and padding on mobile
+
+- **Footer** — added "CLAW Federation : Coffee Spot" subtitle under logo with gradient on "CLAW" and "Coffee"
+
+- **PageHeader component** — title scales `text-lg → sm:xl → md:2xl` for better mobile readability
+
+---
+
 ## [2026-02-07] Landing Page Polish — Unified Visual Identity
 
 ### Added

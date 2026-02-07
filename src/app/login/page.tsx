@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { getSupabaseBrowserClient } from "@/lib/supabaseClient";
 import { Logo } from "@/components/ui/Logo";
+import { AnimatedBackground } from "@/components/background/AnimatedBackground";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -56,25 +57,41 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 px-4 dark:from-stone-950 dark:via-stone-900 dark:to-stone-950">
-      <div className="w-full max-w-md">
-        {/* Brand */}
-        <div className="mb-8 text-center">
-          <Link href="/">
-            <div className="mb-5 flex justify-center">
-              <Logo className="text-2xl" />
-            </div>
+    <div className="relative flex min-h-screen items-center justify-center px-4">
+      <AnimatedBackground config={{ intensity: "medium", nodeCount: 22 }} />
+
+      <div className="relative z-10 w-full max-w-md">
+        {/* Back to home pill */}
+        <div className="mb-6 flex justify-center">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-medium text-stone-500 backdrop-blur-sm transition-all hover:border-amber-400/30 hover:bg-white/20 hover:text-amber-600 dark:border-white/10 dark:bg-white/5 dark:text-stone-400 dark:hover:border-amber-400/20 dark:hover:text-amber-400"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+            Back to home
           </Link>
-          <h1 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
-            Welcome back
-          </h1>
-          <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
-            Where teams and agents meet to get things done.
-          </p>
         </div>
 
-        {/* Login card */}
-        <div className="rounded-3xl border border-white/60 bg-white/80 p-8 shadow-xl shadow-amber-900/5 backdrop-blur-xl dark:border-stone-800 dark:bg-stone-900/80">
+        {/* Brand + Login — frosted glass container like the hero card */}
+        <div className="rounded-2xl border border-white/[0.085] bg-white/[0.075] px-5 py-8 shadow-2xl shadow-stone-900/[0.04] ring-1 ring-white/[0.04] backdrop-blur-[3px] sm:rounded-3xl sm:px-10 sm:py-12 dark:border-white/[0.035] dark:bg-white/[0.02] dark:shadow-black/15">
+          {/* Brand */}
+          <div className="mb-8 text-center">
+            <Link href="/" className="mb-6 inline-flex flex-col items-center">
+              <Logo className="text-2xl" />
+              <span className="mt-0.5 text-[0.5rem] font-semibold uppercase tracking-[0.22em] text-stone-400 dark:text-stone-500">
+                <span className="gradient-text-animated">CLAW</span> Federation : <span className="gradient-text-animated">Coffee</span> Spot
+              </span>
+            </Link>
+            <h1 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
+              Welcome back!
+            </h1>
+            <p className="mx-auto mt-3 max-w-xs text-sm leading-relaxed text-white/60 dark:text-white/50">
+              Where teams and agents meet to get things done.
+            </p>
+          </div>
+
+          {/* Login form */}
+          <div>
           <form onSubmit={signIn} className="space-y-5">
             <div>
               <label
@@ -89,7 +106,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 placeholder="you@company.com"
-                className="w-full rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm outline-none transition-all placeholder:text-stone-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 dark:border-stone-700 dark:bg-stone-950 dark:focus:border-amber-500 dark:focus:ring-amber-500/20"
+                className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-stone-900 outline-none backdrop-blur-sm transition-all placeholder:text-stone-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 dark:border-white/10 dark:bg-white/5 dark:text-stone-100 dark:placeholder:text-stone-500 dark:focus:border-amber-500 dark:focus:ring-amber-500/20"
                 required
               />
             </div>
@@ -112,16 +129,9 @@ export default function LoginPage() {
               </div>
             )}
           </form>
+          </div>
         </div>
 
-        <div className="mt-6 text-center">
-          <Link
-            href="/"
-            className="text-xs text-stone-400 transition-colors hover:text-stone-600 dark:text-stone-600 dark:hover:text-stone-400"
-          >
-            &larr; Back to home
-          </Link>
-        </div>
       </div>
     </div>
   );
