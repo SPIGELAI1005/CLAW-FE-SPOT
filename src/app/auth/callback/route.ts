@@ -27,6 +27,10 @@ export async function GET(request: Request) {
 
   const supabase = await createSupabaseServerClient();
 
+  if (!supabase) {
+    return NextResponse.redirect(new URL("/login?error=missing_config", url));
+  }
+
   // PKCE flow: exchange authorization code for session
   if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);

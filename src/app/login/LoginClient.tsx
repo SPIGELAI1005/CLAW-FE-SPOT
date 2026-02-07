@@ -17,6 +17,7 @@ export function LoginClient() {
   // Check if already logged in
   useEffect(() => {
     const supabase = getSupabaseBrowserClient();
+    if (!supabase) return;
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) router.replace("/dashboard");
     });
@@ -41,6 +42,12 @@ export function LoginClient() {
     setIsLoading(true);
 
     const supabase = getSupabaseBrowserClient();
+    if (!supabase) {
+      setIsLoading(false);
+      setStatus("Authentication is not configured. Please set Supabase environment variables.");
+      return;
+    }
+
     const redirectTo =
       typeof window !== "undefined"
         ? `${window.location.origin}/auth/callback?next=${encodeURIComponent("/dashboard")}`

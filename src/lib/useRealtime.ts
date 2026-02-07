@@ -29,6 +29,7 @@ export function useRealtimeInserts<T extends Record<string, unknown>>({
     if (!enabled || !filterValue) return;
 
     const supabase = getSupabaseBrowserClient();
+    if (!supabase) return;
     const channelName = `${table}:${filterColumn}:${filterValue}`;
 
     const channel = supabase
@@ -70,6 +71,7 @@ export function usePresence(spotId: string, userId: string, displayName: string)
     if (!spotId || !userId) return;
 
     const supabase = getSupabaseBrowserClient();
+    if (!supabase) return;
     const channel = supabase.channel(`presence:spot:${spotId}`, {
       config: { presence: { key: userId } },
     });

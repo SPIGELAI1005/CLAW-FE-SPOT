@@ -8,12 +8,12 @@ function redirectToLogin(request: Request) {
 
 export async function GET(request: Request) {
   const supabase = await createSupabaseServerClient();
-  await supabase.auth.signOut();
+  if (supabase) await supabase.auth.signOut();
   return redirectToLogin(request);
 }
 
 export async function POST(request: Request) {
   const supabase = await createSupabaseServerClient();
-  await supabase.auth.signOut();
+  if (supabase) await supabase.auth.signOut();
   return redirectToLogin(request);
 }

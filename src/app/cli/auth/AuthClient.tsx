@@ -30,6 +30,10 @@ export function AuthClient() {
         return;
       }
       const supabase = getSupabaseBrowserClient();
+      if (!supabase) {
+        setStatus("Authentication is not configured.");
+        return;
+      }
       const { data } = await supabase.auth.getSession();
       if (!data.session) {
         setStatus("You are not signed in. Please sign in first, then retry.");
@@ -45,6 +49,10 @@ export function AuthClient() {
     setStatus("Sending token to local CLI…");
 
     const supabase = getSupabaseBrowserClient();
+    if (!supabase) {
+      setStatus("Authentication is not configured.");
+      return;
+    }
     const { data } = await supabase.auth.getSession();
     const token = data.session?.access_token;
 
