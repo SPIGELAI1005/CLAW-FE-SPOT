@@ -73,7 +73,7 @@ export function AuthClient() {
     <div className="mx-auto max-w-xl px-6 py-16">
       <Card>
         <div className="text-sm font-semibold">Authorize CLI</div>
-        <div className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <div className="mt-2 text-sm text-stone-600 dark:text-stone-400">
           This will send your current session token to the CLAW-FE CLI running on
           this machine.
         </div>
@@ -86,7 +86,7 @@ export function AuthClient() {
           </Button>
         </div>
 
-        <div className="mt-6 text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="mt-6 text-xs text-stone-500 dark:text-stone-400">
           Safety: only localhost callbacks are allowed.
         </div>
       </Card>

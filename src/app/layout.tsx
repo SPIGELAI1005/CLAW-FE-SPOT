@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppShell } from "@/components/AppShell";
+import { ToastProvider } from "@/components/ui/Toast";
+import { OnboardingProvider } from "@/components/onboarding/OnboardingProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CLAW:FE",
-  description: "CLAW:FE SPOT — One table. One truth. Audited outcomes.",
+  title: "CLAW:FE SPOT",
+  description: "CLAW:FE SPOT — Where teams and agents meet to get things done.",
   icons: {
     icon: "/favicon.png",
     apple: "/icons/apple-touch-icon.png",
@@ -32,7 +34,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AppShell>{children}</AppShell>
+        <ToastProvider>
+          <OnboardingProvider>
+            <AppShell>{children}</AppShell>
+          </OnboardingProvider>
+        </ToastProvider>
       </body>
     </html>
   );

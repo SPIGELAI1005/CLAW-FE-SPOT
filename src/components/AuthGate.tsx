@@ -13,17 +13,22 @@ export async function AuthGate({
 
   if (!user) {
     return (
-      <div className="mx-auto max-w-xl px-6 py-16">
-        <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
-          <div className="text-sm font-semibold">Sign in required</div>
-          <div className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-            To protect your Tables as a Single Point Of Truth, CLAW:FE SPOT
-            requires authentication.
+      <div className="flex min-h-[60vh] items-center justify-center px-6">
+        <div className="w-full max-w-md text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-stone-900 shadow-lg dark:bg-stone-800">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           </div>
-          <div className="mt-5">
+          <h2 className="text-lg font-bold text-stone-900 dark:text-stone-50">
+            Sign in to continue
+          </h2>
+          <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
+            CLAW:FE SPOT requires authentication to protect your workspaces
+            and audit trails.
+          </p>
+          <div className="mt-6">
             <Link
               href="/login"
-              className="inline-flex h-11 items-center justify-center rounded-full bg-zinc-900 px-5 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-white"
+              className="inline-flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 px-6 text-sm font-semibold text-white shadow-md shadow-amber-500/20 transition-all hover:shadow-lg hover:shadow-amber-500/30"
             >
               Go to Login
             </Link>

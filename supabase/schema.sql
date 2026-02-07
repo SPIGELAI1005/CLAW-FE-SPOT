@@ -136,11 +136,8 @@ for select using (auth.uid() = owner_id);
 create policy "audit_reports_insert_own" on public.audit_reports
 for insert with check (auth.uid() = owner_id);
 
-create policy "audit_reports_update_own" on public.audit_reports
-for update using (auth.uid() = owner_id);
-
-create policy "audit_reports_delete_own" on public.audit_reports
-for delete using (auth.uid() = owner_id);
+-- NOTE: No UPDATE or DELETE policies on audit_reports.
+-- Audit reports are immutable for audit trail integrity.
 
 -- Recipes (Phase 4)
 create table if not exists public.recipes (
@@ -183,10 +180,9 @@ create policy "recipe_versions_select_own" on public.recipe_versions
 for select using (auth.uid() = owner_id);
 create policy "recipe_versions_insert_own" on public.recipe_versions
 for insert with check (auth.uid() = owner_id);
-create policy "recipe_versions_update_own" on public.recipe_versions
-for update using (auth.uid() = owner_id);
-create policy "recipe_versions_delete_own" on public.recipe_versions
-for delete using (auth.uid() = owner_id);
+
+-- NOTE: No UPDATE or DELETE policies on recipe_versions.
+-- Versions are immutable — create a new version instead.
 
 -- Status overrides (Phase 3)
 create table if not exists public.status_overrides (
@@ -208,11 +204,8 @@ for select using (auth.uid() = owner_id);
 create policy "status_overrides_insert_own" on public.status_overrides
 for insert with check (auth.uid() = owner_id);
 
-create policy "status_overrides_update_own" on public.status_overrides
-for update using (auth.uid() = owner_id);
-
-create policy "status_overrides_delete_own" on public.status_overrides
-for delete using (auth.uid() = owner_id);
+-- NOTE: No UPDATE or DELETE policies on status_overrides.
+-- Override records are immutable for audit trail integrity.
 
 -- Artifacts: owner can CRUD
 create policy "artifacts_select_own" on public.artifacts

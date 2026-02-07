@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1200"
+     height="240"
+     viewBox="0 0 1200 240">
+
+  <defs>
+    <!-- Animated red gradient for CLAW -->
+    <linearGradient id="clawGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#9f1239">
+        <animate attributeName="stop-color"
+          values="#9f1239;#e11d48;#be123c;#f43f5e;#881337;#9f1239"
+          dur="6s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="50%" stop-color="#f43f5e">
+        <animate attributeName="stop-color"
+          values="#f43f5e;#881337;#e11d48;#9f1239;#f43f5e;#f43f5e"
+          dur="6s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%" stop-color="#e11d48">
+        <animate attributeName="stop-color"
+          values="#e11d48;#9f1239;#f43f5e;#881337;#e11d48;#e11d48"
+          dur="6s" repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
+
+    <!-- Animated warm white gradient for :FE SPOT (light bg) -->
+    <linearGradient id="spotGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff">
+        <animate attributeName="stop-color"
+          values="#ffffff;#e7e5e4;#fafaf9;#d6d3d1;#ffffff;#ffffff"
+          dur="6s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="50%" stop-color="#e7e5e4">
+        <animate attributeName="stop-color"
+          values="#e7e5e4;#fafaf9;#d6d3d1;#ffffff;#e7e5e4;#e7e5e4"
+          dur="6s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%" stop-color="#fafaf9">
+        <animate attributeName="stop-color"
+          values="#fafaf9;#d6d3d1;#ffffff;#e7e5e4;#fafaf9;#fafaf9"
+          dur="6s" repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
+  </defs>
+
+  <style>
+    .brand {
+      font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+  </style>
+
+  <!-- CLAW -->
+  <text x="0" y="170"
+        class="brand"
+        font-size="160"
+        fill="url(#clawGrad)">CLAW</text>
+
+  <!-- :FE SPOT -->
+  <text x="475" y="170"
+        class="brand"
+        font-size="160"
+        fill="url(#spotGrad)">:FE SPOT</text>
+
+</svg>

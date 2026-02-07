@@ -1,8 +1,33 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #faf8f5;
+  --foreground: #1c1917;
+  --app-bg: #faf8f5;
+  --sidebar-bg: #1c1917;
+  --sidebar-text: #e7e5e4;
+  --sidebar-text-muted: #a8a29e;
+  --sidebar-active: rgba(251, 191, 36, 0.15);
+  --sidebar-active-text: #fbbf24;
+  --sidebar-hover: rgba(255, 255, 255, 0.06);
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 64px;
+  --bottom-tabs-height: 68px;
+  --topbar-height: 72px;
+  --accent: #d97706;
+  --accent-light: #fef3c7;
+  --accent-glow: rgba(217, 119, 6, 0.15);
+  --card-bg: #ffffff;
+  --card-border: #f0ece7;
+  --card-shadow: 0 1px 3px rgba(120, 80, 20, 0.04), 0 4px 12px rgba(120, 80, 20, 0.03);
+
+  /* Background animation canvas properties */
+  --warm-glow: 30 30% 94%;
+  --vignette: 30 15% 88%;
+  --steam: 30 20% 80%;
+  --node-line: 30 15% 55%;
+  --coffee: 25 40% 35%;
+  --audit-ring: 36 80% 50%;
 }
 
 @theme inline {
@@ -14,23 +39,228 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0c0a09;
+    --foreground: #fafaf9;
+    --app-bg: #0c0a09;
+    --sidebar-bg: #0c0a09;
+    --sidebar-text: #e7e5e4;
+    --sidebar-text-muted: #78716c;
+    --sidebar-active: rgba(251, 191, 36, 0.12);
+    --sidebar-active-text: #fbbf24;
+    --sidebar-hover: rgba(255, 255, 255, 0.04);
+    --accent: #f59e0b;
+    --accent-light: #451a03;
+    --accent-glow: rgba(245, 158, 11, 0.1);
+    --card-bg: #1c1917;
+    --card-border: #292524;
+    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    /* Background animation canvas properties — dark mode */
+    --warm-glow: 25 12% 8%;
+    --vignette: 20 8% 4%;
+    --steam: 30 10% 25%;
+    --node-line: 30 10% 40%;
+    --coffee: 25 25% 55%;
+    --audit-ring: 36 60% 45%;
   }
 }
 
+.dark {
+  --warm-glow: 25 12% 8%;
+  --vignette: 20 8% 4%;
+  --steam: 30 10% 25%;
+  --node-line: 30 10% 40%;
+  --coffee: 25 25% 55%;
+  --audit-ring: 36 60% 45%;
+}
+
 body {
-  background: var(--background);
+  background: var(--app-bg);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
-/* Subtle product background (kept minimal; Tailwind still does most) */
-.bg-app {
+/* Subtle warm background gradient */
+.bg-app-gradient {
   background:
-    radial-gradient(800px 400px at 20% 0%, rgba(56, 189, 248, 0.10), transparent 60%),
-    radial-gradient(700px 380px at 80% 10%, rgba(168, 85, 247, 0.10), transparent 55%),
-    radial-gradient(900px 500px at 50% 100%, rgba(16, 185, 129, 0.08), transparent 60%),
-    var(--background);
+    radial-gradient(ellipse 800px 600px at 10% 0%, rgba(251, 191, 36, 0.07), transparent 60%),
+    radial-gradient(ellipse 600px 400px at 90% 10%, rgba(217, 119, 6, 0.05), transparent 55%),
+    radial-gradient(ellipse 900px 500px at 50% 100%, rgba(180, 83, 9, 0.04), transparent 60%),
+    var(--app-bg);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d6d3d1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a29e;
+}
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-thumb {
+    background: #44403c;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #57534e;
+  }
+}
+
+/* Animated gradient button */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+/* Default (red) gradient — used for "New SPOT" button */
+.btn-gradient-animated {
+  background: linear-gradient(
+    135deg,
+    #9f1239,
+    #e11d48,
+    #be123c,
+    #f43f5e,
+    #e11d48,
+    #881337,
+    #9f1239
+  );
+  background-size: 300% 300%;
+  animation: gradient-shift 6s ease infinite;
+  color: #ffffff;
+}
+.btn-gradient-animated:hover {
+  animation-duration: 3s;
+  filter: brightness(1.1);
+}
+
+/* Member (blue/sky) gradient */
+.btn-gradient-member {
+  background: linear-gradient(
+    135deg,
+    #075985,
+    #0284c7,
+    #0369a1,
+    #0ea5e9,
+    #0284c7,
+    #0c4a6e,
+    #075985
+  );
+  background-size: 300% 300%;
+  animation: gradient-shift 6s ease infinite;
+  color: #ffffff;
+}
+.btn-gradient-member:hover {
+  animation-duration: 3s;
+  filter: brightness(1.1);
+}
+
+/* Pilot (amber/golden) gradient */
+.btn-gradient-pilot {
+  background: linear-gradient(
+    135deg,
+    #92400e,
+    #d97706,
+    #b45309,
+    #f59e0b,
+    #d97706,
+    #78350f,
+    #92400e
+  );
+  background-size: 300% 300%;
+  animation: gradient-shift 6s ease infinite;
+  color: #ffffff;
+}
+.btn-gradient-pilot:hover {
+  animation-duration: 3s;
+  filter: brightness(1.1);
+}
+
+/* Agent (emerald/green) gradient */
+.btn-gradient-agent {
+  background: linear-gradient(
+    135deg,
+    #065f46,
+    #059669,
+    #047857,
+    #10b981,
+    #059669,
+    #064e3b,
+    #065f46
+  );
+  background-size: 300% 300%;
+  animation: gradient-shift 6s ease infinite;
+  color: #ffffff;
+}
+.btn-gradient-agent:hover {
+  animation-duration: 3s;
+  filter: brightness(1.1);
+}
+
+/* Animated gradient text — amber → orange → rose shimmer */
+@keyframes gradient-text-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.gradient-text-animated {
+  background: linear-gradient(
+    90deg,
+    #f59e0b,
+    #f97316,
+    #e11d48,
+    #f97316,
+    #f59e0b,
+    #f97316,
+    #e11d48
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-text-flow 8s ease infinite;
+}
+
+/* Trust carousel infinite scroll */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Toast animations */
+@keyframes slide-in-from-right {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.animate-in.slide-in-from-right {
+  animation: slide-in-from-right 0.2s ease-out;
 }
