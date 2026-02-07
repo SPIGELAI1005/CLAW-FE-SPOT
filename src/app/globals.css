@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* Subtle product background (kept minimal; Tailwind still does most) */
+.bg-app {
+  background:
+    radial-gradient(800px 400px at 20% 0%, rgba(56, 189, 248, 0.10), transparent 60%),
+    radial-gradient(700px 380px at 80% 10%, rgba(168, 85, 247, 0.10), transparent 55%),
+    radial-gradient(900px 500px at 50% 100%, rgba(16, 185, 129, 0.08), transparent 60%),
+    var(--background);
+}
