@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { CertBadge } from "@/components/ui/CertBadge";
+import { BlockchainBadge } from "@/components/spot/BlockchainBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useFetch } from "@/lib/useFetch";
 import type { CertificationStatus } from "@/lib/spotTypes";
@@ -56,7 +57,7 @@ export function VaultClient() {
       />
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-        <div className="max-w-xs flex-1">
+        <div className="w-full flex-1 sm:max-w-xs">
           <Input
             placeholder="Search by SPOT name..."
             value={search}
@@ -114,6 +115,9 @@ function AuditRow({
               L1: {entry.l1_verdict_count} verdict{entry.l1_verdict_count !== 1 ? "s" : ""}
             </Badge>
             <CertBadge status={entry.certification_status as CertificationStatus} />
+            {entry.certification_status === "certified" && (
+              <BlockchainBadge status="valid" />
+            )}
           </div>
           <div className="mt-1 text-[10px] text-stone-400">
             Updated {new Date(entry.updated_at).toLocaleDateString()}

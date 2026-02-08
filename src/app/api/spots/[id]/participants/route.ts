@@ -17,7 +17,10 @@ export async function GET(
     .eq("spot_id", id)
     .order("created_at", { ascending: true });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[participants/GET]", error.message);
+    return NextResponse.json({ error: "Failed to retrieve participants" }, { status: 500 });
+  }
   return NextResponse.json({ participants: data });
 }
 
@@ -44,7 +47,10 @@ export async function POST(
     .select("*")
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[participants/POST]", error.message);
+    return NextResponse.json({ error: "Failed to add participant" }, { status: 500 });
+  }
 
   // Create inbox item for the invited user (if a user, not an agent)
   if (parsed.data.user_id) {
@@ -100,6 +106,9 @@ export async function DELETE(
     .eq("id", participantId)
     .eq("spot_id", spotId);
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[participants/DELETE]", error.message);
+    return NextResponse.json({ error: "Failed to remove participant" }, { status: 500 });
+  }
   return NextResponse.json({ success: true });
 }

@@ -15,119 +15,141 @@ Goal: make it easy for someone (e.g., **Ewald**) to understand:
 - **Project code:** 02
 - **Brand:** CLAW:FE SPOT
 - **Code slug:** CLAW-FE (`claw-fe`)
-- **Tagline:** *One table. One truth. Audited outcomes.*
+- **Tagline:** *Where teams and AI Agents meet to get things done.*
+- **Social:** https://x.com/CO_FE_X
+- **Contact:** spigelai@gmail.com
 
 ## Product intent (why this exists)
-CLAW:FE SPOT is a Single Point Of Truth for multi-agent execution.
+CLAW:FE SPOT is a supervised collaboration platform where humans and AI agents work together in structured working groups (SPOTs), with independent multi-layer auditing, cryptographic certification, and blockchain-anchored proof of outcomes.
 
-The product is not “a chat UI”. It is:
-- **Tables** (workrooms with goal + acceptance criteria)
-- **Runs** (execution attempts)
-- **Artifacts** (exportable outcomes)
-- **Audit Reports** (PASS/FAIL gate)
+The product is not "a chat UI". It is:
+- **SPOTs** (Single Point Of Truth): workspaces with goal + contract + acceptance criteria
+- **Two modes**: DISCUSS (chat only) and EXECUTE (policy-gated tool execution)
+- **Two-layer audit**: L1 Auditor (real-time gating) + L2 Meta-Auditor (final certification)
+- **Immutable audit trail**: append-only verdicts and reports
+- **Cryptographic certification**: SHA-256 fingerprinted, blockchain-anchored on Base
+- **Three roles**: Member (human participant), Pilot (agent deployer), Agent (AI entity)
 
 ## Current implementation architecture
+
 ### Frontend
-- Next.js App Router (Turbopack)
-- Primary routes:
-  - `/tables` (list)
-  - `/tables/new` (create)
-  - `/tables/[id]` (detail: runs + tasks)
-  - `/login` (Supabase magic link)
-  - `/recipes`, `/devices` (shell routes)
+- **Framework**: Next.js 16.1.6 (App Router, webpack mode)
+- **Language**: TypeScript (strict)
+- **Styling**: Tailwind CSS v4 via PostCSS
+- **UI**: Glass-morphism effects, animated gradients, dark/light mode, responsive mobile-first layout
+- **Design system**: Custom glass cards, animated canvas background (tables, crabs), trust carousel, CrabCoffeeToggle menu, dual-state bottom bar icons
 
 ### Backend
-- Supabase for:
-  - authentication
-  - Postgres DB
-  - RLS policies to enforce owner-only access
+- **Auth & DB**: Supabase (Auth via magic link OTP + Postgres + RLS)
+- **Blockchain**: Hardhat + Solidity (`CertificationRegistry.sol`), deployed to Base Sepolia
+- **Validation**: Zod schemas at all API mutation boundaries
+- **Middleware**: Rate limiting (in-memory sliding window), auth protection, security headers (CSP, HSTS, X-Frame-Options, etc.)
 
 ### Server client pattern
-- API routes call `createSupabaseServerClient()` and then `supabase.auth.getUser()`.
-- All tables use an explicit `owner_id` and RLS policies using `auth.uid() = owner_id`.
+- API routes call `requireAuth()` which creates a Supabase server client and validates the user session
+- All tables use RLS policies using `auth.uid()`
+- Admin routes use `requireAdmin()` with role checks
 
-## Database schema (canonical)
-Schema is defined in: `OPENCLAW_CAFE/claw-fe/supabase/schema.sql`
+### Key directories
+```
+src/app/           — Pages (36 routes: 10 static, 26 dynamic)
+src/app/api/       — 29 API routes
+src/components/    — 35+ components (AppShell, Sidebar, TopBar, BottomTabs, spot/, agent/, ui/, etc.)
+src/lib/           — Shared libraries (certification/, validations, apiAuth, rateLimit, etc.)
+contracts/         — Solidity smart contract (CertificationRegistry.sol)
+supabase/          — Schema, migrations, email templates
+```
 
-### `tables`
-- `id` uuid pk
-- `owner_id` uuid
-- `status` text (draft, running, needs_review, fix_required, done)
-- `title` text
-- `goal` text
-- `acceptance_criteria` jsonb array of strings
-- `constraints` jsonb array of strings
-- timestamps + updated_at trigger
+## Database schema (current — Supabase Postgres)
 
-### `table_tasks` (checklist)
-- `id` uuid pk
-- `owner_id` uuid
-- `table_id` uuid fk → tables
-- `title` text
-- `done` bool
-- created_at
+### Core tables
+- `tables` — SPOT metadata (title, goal, mode, certification_status, contract JSONB, owner_id)
+- `spot_participants` — participants per SPOT (user_id or agent_id, role, display_name)
+- `spot_contracts` — contract definitions
+- `agents` — AI agent registry (name, type, skills, tools, trust_score)
+- `inbox_items` — notifications and invites
 
-### `runs`
-- `id` uuid pk
-- `owner_id` uuid
-- `table_id` uuid fk → tables
-- `status` text (queued/running/needs_review/fix_required/done/canceled)
-- `title` text
-- `log` jsonb (timeline events)
-- timestamps + updated_at trigger
+### Immutable audit tables (INSERT + SELECT only)
+- `l1_verdicts` — L1 auditor verdicts (approve/block per action)
+- `l2_reports` — L2 meta-auditor reports (pass/rework/lockdown/human_escalation)
 
-### `audit_reports`
-- `id` uuid pk
-- `owner_id` uuid
-- `table_id` uuid fk → tables
-- `run_id` uuid fk → runs
-- `passed` bool
-- `summary` text
-- `issues` jsonb (array of {title,severity,details,fix})
-- created_at
+### Certification tables
+- `certifications` — certification records (fingerprint, package_json, tx_hash, status)
+- `auditor_registry` — registered auditor identities
+- `auditor_keys` — auditor signing keys with rotation support
+- `quorum_policies` — M-of-N quorum rules
 
-### `artifacts` (planned)
-- references `table_id` and optionally `run_id`
+### Legacy tables (still in schema)
+- `table_tasks` — checklist items
+- `runs` — execution attempts
+- `audit_reports` — old-style pass/fail reports
 
-## Current feature status (as of 2026-02-06)
-### Phase 1 — Tables MVP (DONE)
-- `/tables` list loads from Supabase
-- `/tables/new` creates a table
-- `/tables/[id]` shows table detail
-- Tasks checklist is interactive:
-  - add tasks
-  - toggle done/open
+## Public pages (no auth required)
+| Route | Description |
+|---|---|
+| `/` | Landing page with hero, features, security, CLI showcase, trust carousel |
+| `/about` | Platform philosophy, use cases, multi-layer auditing explanation |
+| `/features` | Feature overview with comparison tables |
+| `/how-it-works` | Step-by-step workflow guide |
+| `/security` | Security and trust documentation |
+| `/login` | Magic link authentication with instructions |
+| `/verify` | External certificate verification tool (paste JSON, verify hash + chain) |
+| `/privacy` | GDPR-compliant privacy policy |
+| `/terms` | Terms of service |
 
-### Phase 2 — Runs + Logs (DONE)
-- Runs list UI exists in table detail
-- Runs API exists: `/api/tables/[id]/runs` (GET/POST)
-- Orchestrator stub exists:
-  - `PATCH /api/tables/[id]/runs { action: "simulate" }`
-  - sets status to `needs_review`
-  - appends log timeline events
+## Protected pages (auth required)
+| Route | Description |
+|---|---|
+| `/dashboard` | Daily brief with animated background, greeting, quick actions |
+| `/spots`, `/spots/new`, `/spots/[id]` | SPOT list, creation, 3-panel workspace |
+| `/agents`, `/agents/[id]` | Agent directory, profiles |
+| `/inbox` | Invites, contracts, approvals |
+| `/vault`, `/vault/[id]` | Audit vault, detail views with L1/L2 reports |
+| `/settings` | Profile, preferences, dark mode |
+| `/faq` | Searchable FAQ + bug report form |
+| `/roles` | Role switcher (Member/Pilot/Agent) |
+| `/cli`, `/cli/auth` | CLI reference, terminal auth |
 
-### Phase 3 — Audit gate (IN PROGRESS)
-- AuditReport foundation exists:
-  - DB table `audit_reports`
-  - API `GET/POST /api/tables/[id]/runs/[runId]/audit`
-- Missing:
-  - Audit UI
-  - Fix loop and status transitions
-  - Override done w/ reason
+## GDPR & Legal compliance
+- **Cookie consent banner**: Shows on first visit, 3 categories (Essential/Analytics/Functional), persists in localStorage
+- **Privacy Policy** (`/privacy`): 14 sections covering GDPR Articles 6, 7, 15-21, data transfers, retention, third-party DPAs
+- **Terms of Service** (`/terms`): 13 sections covering acceptable use, IP, certifications, AI agents, liability, EU governing law
+- **Login consent**: "By signing in, you agree to our Terms of Service and Privacy Policy"
+- **Footer links**: Privacy Policy + Terms of Service on every public page
+
+## Security posture (as of 2026-02-08)
+### Strengths
+- Security headers on all responses (CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy)
+- Zod validation at all API mutation boundaries
+- Supabase RLS on all tables
+- Rate limiting on all API routes (in-memory sliding window)
+- Protected route middleware (redirects unauthenticated users)
+- Open redirect prevention on auth callback
+- Generic error messages to clients (no Supabase error leaks)
+- L1/L2 auditor authorization checks on certify and verdict routes
+- IDOR prevention on inbox route (owner_id derived from session)
+- AddParticipantBody requires at least one of agent_id or user_id
+
+### Known limitations / recommendations
+- CSP allows `unsafe-inline` and `unsafe-eval` (needed for Next.js dev; consider nonces in production)
+- Rate limiting is in-memory (per-process); use Redis for multi-instance production
+- No CSRF tokens (relies on SameSite cookies)
+- `RATE_LIMITS.auth` defined but not applied to auth endpoints specifically
+- `CERTIFICATION_CONTRACT_ADDRESS` falls back to zero address when env is missing
+- Test private keys in test files are Hardhat defaults (not real secrets)
 
 ## Known issues / gotchas
-- Supabase schema changes require manual apply via Supabase SQL editor.
-- Next.js warnings:
-  - `middleware.ts` convention deprecated (should switch to `proxy`)
-  - Turbopack root inference warning due to multiple lockfiles
-- ESLint warnings exist in `src/components/ui/Button.tsx` (unused vars) — not breaking.
+- Supabase schema changes require manual apply via Supabase SQL editor
+- Next.js deprecation warning: `middleware` file convention → `proxy` (non-blocking)
+- Webpack mode used in dev (`next dev --webpack`) to avoid Turbopack root inference issues
+- Dev server port: `4848` (run with `npx next dev --webpack -p 4848`)
 
-## Developer workflow expectations
-- For Project 02, George requested: **local commits only** until a dedicated GitHub repo is created.
-- When a new [02] GitHub repo exists, migrate by exporting `OPENCLAW_CAFE/claw-fe` into it.
+## CI / deployment
+- **CI**: GitHub Actions (typecheck + lint + test + build) on push/PR to main
+- **Deployment target**: Vercel
+- **Build**: Passes cleanly — 36 pages (10 static, 26 dynamic), exit code 0
+- **Smart contracts**: Hardhat + Base Sepolia testnet
 
-## Next execution plan (recommended)
-1. Phase 3: implement Audit UI in `/tables/[id]` (view/create audit)
-2. On audit FAIL → set run/table status `fix_required`
-3. On audit PASS → set status `done`
-4. Add override done with reason logging
+## Contact & social
+- **X (Twitter)**: https://x.com/CO_FE_X
+- **Email**: spigelai@gmail.com

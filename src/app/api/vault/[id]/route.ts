@@ -15,7 +15,14 @@ export async function GET(
     .select("*")
     .eq("id", id)
     .single();
-  if (spotErr) return NextResponse.json({ error: spotErr.message }, { status: 500 });
+  if (spotErr || !spot) {
+    // PGRST116 = "no rows" i.e. not found or not authorized via RLS
+    const status = spotErr?.code === "PGRST116" || !spot ? 404 : 500;
+    return NextResponse.json(
+      { error: status === 404 ? "SPOT not found" : "Failed to retrieve SPOT" },
+      { status },
+    );
+  }
 
   // Get L1 verdicts
   const { data: l1Verdicts } = await supabase

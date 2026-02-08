@@ -6,6 +6,78 @@ Format inspired by Keep a Changelog.
 
 ---
 
+## [2026-02-08] GDPR Compliance, Login UX, Footer Social Links & Security Hardening
+
+### Added
+- **Privacy Policy page** (`/privacy`)
+  - Full GDPR-compliant privacy policy covering all 14 required sections
+  - Data controller identification, data categories, legal bases (Art. 6(1)), cookie policy, data retention, all GDPR rights (Arts. 15-21), data transfers and safeguards (SCCs), third-party services, data security, children's privacy, supervisory authority, and contact
+  - Glass card styling consistent with the rest of the app
+  - Responsive layout with header, dark mode toggle, and branded footer
+
+- **Terms of Service page** (`/terms`)
+  - Comprehensive ToS covering: acceptance, service description, user accounts, acceptable use, IP rights, certifications and immutability, AI agent interactions, privacy reference, limitation of liability, termination, modification, governing law (EU), and contact
+  - Same glass card styling and branded footer
+
+- **Cookie consent banner** (`src/components/gdpr/CookieConsent.tsx`)
+  - GDPR-compliant cookie consent dialog shown on first visit
+  - Three actions: "Accept all", "Essential only", "Customize preferences"
+  - Expandable preferences panel with three cookie categories: Essential (always on), Analytics (opt-in), Functional (opt-in)
+  - Persists choices in `localStorage`, dispatches `cookie-consent-update` event
+  - Renders as fixed bottom dialog (`z-[9999]`), styled for both light and dark modes
+  - Added to root `layout.tsx` — shows on every page
+
+- **Footer social icons** across all 8 public pages
+  - X (Twitter) icon linking to https://x.com/CO_FE_X (opens in new tab, `noopener noreferrer`)
+  - Email icon linking to `mailto:spigelai@gmail.com`
+  - Styled as 32x32 rounded buttons with hover effects matching design system
+
+- **Footer legal links** across all 8 public pages (Landing, About, Features, How It Works, Security, Login, Privacy, Terms)
+  - "Privacy Policy" and "Terms of Service" underlined links below copyright
+
+- **Login page improvements**
+  - Magic link instructions box: step-by-step guide (enter email → check inbox → click link), plus note about expiry and single-use
+  - Legal consent line below form: "By signing in, you agree to our Terms of Service and Privacy Policy"
+  - Email placeholder changed from `you@company.com` to `Write your email address`
+
+### Changed
+- **AppShell** — added `/privacy` and `/terms` to `BARE_ROUTES` (renders without app chrome)
+- **Middleware** — added `/privacy` and `/terms` to `PUBLIC_ROUTES` (no auth required)
+
+### Security Fixes (7 issues)
+- **IDOR in inbox route** (HIGH) — `owner_id` no longer accepted from client body; derived from authenticated `user.id`
+- **Missing L2 auditor authorization** (HIGH) — `/api/spots/[id]/certify` now verifies caller has `l2_meta_auditor` role via `spot_participants`
+- **Missing L1 auditor authorization** (HIGH) — `/api/spots/[id]/verdicts` now verifies caller has `l1_auditor` role via `spot_participants`
+- **AddParticipantBody validation** (MEDIUM) — Zod `.refine()` now requires at least one of `agent_id` or `user_id`
+- **Vault 500 → 404** (MEDIUM) — `/api/vault/[id]` now returns 404 with generic message when spot not found (was leaking Supabase errors as 500)
+- **Certifications UUID validation** (MEDIUM) — `GET /api/certifications?spot_id=` now validates UUID format before querying
+- **Error message sanitization** (MEDIUM) — All critical API routes now return generic error messages to clients; full Supabase errors logged server-side only (inbox, certify, verdicts, certifications, participants)
+
+---
+
+## [2026-02-08] Mobile Responsiveness & Dark Mode Contrast Audit
+
+### Fixed
+- **Dark mode contrast** — systematic fix across all public pages
+  - Replaced `dark:text-white/60` (~4:1 ratio) with `dark:text-stone-400` (6.6:1 — WCAG AA compliant) on 8 pages
+  - Replaced `dark:text-white/55` with `dark:text-stone-400`
+  - Replaced `dark:text-white/80` with `dark:text-stone-200` for heading subtext
+  - Replaced `dark:text-white/70` with `dark:text-stone-300`
+  - Fixed footer `dark:text-stone-500` → `dark:text-stone-400` on all public pages
+  - Fixed `dark:text-stone-500` → `dark:text-stone-400` on content labels in SecurityClient and VerifyClient
+  - Retained `dark:text-white/90` on headings (17.5:1 ratio — excellent)
+
+- **Mobile responsiveness**
+  - `VaultClient` — search input now full-width on small screens (`w-full flex-1 sm:max-w-xs`)
+  - `VaultDetailClient` — export buttons wrapped in `flex flex-wrap gap-2` for mobile
+  - `PageHeader` — children container now supports `flex-wrap` for button wrapping
+
+### Verified
+- Production build passes cleanly (36 pages, exit code 0, no 404s)
+- Navigation components (Sidebar, TopBar, BottomTabs) confirmed mobile-responsive
+
+---
+
 ## [2026-02-08] Supabase Email Templates
 
 ### Added

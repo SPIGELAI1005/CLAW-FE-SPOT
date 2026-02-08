@@ -2,112 +2,77 @@
 
 **Brand:** CLAW:FE SPOT  
 **Code name / repo slug:** CLAW-FE  
-**Tagline:** *One table. One truth. Audited outcomes.*
+**Tagline:** *Where teams and AI Agents meet to get things done.*  
+**Social:** https://x.com/CO_FE_X  
+**Contact:** spigelai@gmail.com
 
 ## Product goal
-Create a modern, beautiful (Apple iOS-inspired), easy-to-use web app that acts as a **Single Point Of Truth + Spotlight** for multi-agent execution:
-- Users create **Tables** (workrooms) to solve real tasks.
-- Multiple agents collaborate with clear roles.
-- An **Auditor** produces a structured pass/fail report.
-- The system preserves a trustworthy record: artifacts, decisions, run logs.
+Create a modern, beautiful web app that acts as a **supervised collaboration platform** for human-AI teams:
+- Users create **SPOTs** (Single Point Of Truth) to discuss and execute tasks.
+- AI agents collaborate within defined contracts and policy boundaries.
+- A **two-layer audit** (L1 + L2) provides independent certification.
+- The system preserves an immutable, cryptographically certified audit trail.
 
 ## Guiding principles
-1. **Artifacts > chat.** Conversation exists, but outcomes are king.
-2. **Audit gate.** Nothing is “Done” without an audit pass (or explicit user override).
-3. **Local-first execution.** Agents run on the user’s own machine via a local runner.
-4. **Privacy by default.** Minimal upload; explicit sharing.
-5. **Premium UI.** Calm, high-contrast, spacious layout; subtle motion; crisp typography.
+1. **Supervised AI collaboration** — humans always in the loop.
+2. **Audit gate** — nothing is certified without an independent review.
+3. **Immutable records** — audit trail cannot be altered after the fact.
+4. **Privacy by design** — minimal data collection, GDPR compliance, no PII on-chain.
+5. **Premium UI** — glass-morphism, animated gradients, responsive mobile-first design.
 
-## Architecture (target)
+## Architecture (current)
 ### Components
-1. **CLAW-FE Web (Next.js App Router)** — UI + orchestration + storage
-2. **CLAW-FE Runner (local)** — connects from user machine, executes runs via OpenClaw
-3. **Data store** — TBD (Supabase recommended for speed, or Postgres/SQLite)
-4. **Artifact store** — object storage (Supabase storage / S3-compatible)
+1. **CLAW-FE Web (Next.js 16 App Router)** — UI + API + orchestration
+2. **Supabase** — Auth (magic link) + Postgres + RLS
+3. **Hardhat + Solidity** — CertificationRegistry smart contract on Base
+4. **Vercel** — Deployment target
 
 ### Execution model
-- Web creates a **Run** with role prompts + permissions.
-- Runner pulls run instructions, executes via OpenClaw sessions, streams logs/artifacts.
-- Auditor role runs last, produces a structured report.
+- User creates a SPOT with a goal and contract.
+- Team members and AI agents collaborate (DISCUSS mode or EXECUTE mode).
+- L1 Auditor gates every tool call in real-time (approve/block).
+- L2 Meta-Auditor reviews the full execution log and issues certification.
+- Certified outcomes are SHA-256 fingerprinted and optionally anchored on-chain.
 
-## Full feature set (target)
-### Tables (core)
-- Create/edit/archive tables
-- Goal + acceptance criteria + constraints
-- Role assignment (Driver/Writer/Editor/Researcher/Auditor)
-- Task checklist inside table
-- Table status flow: Draft → Running → Needs Review → Fix Required → Done
-
-### Runs + Orchestration
-- Start run, cancel run, re-run
-- Iteration loop: audit findings → fixes → re-audit
-- Run log timeline
-- Role-based contributions
-
-### Artifacts
-- Artifact manifest (type, file, link, text)
-- Upload/download, versioned artifacts
-- Export bundle (ZIP/MD/PDF) per run or per table
-
-### Audit
-- Structured audit report: PASS/FAIL, issues, severity, fix instructions
-- Compare run outputs vs acceptance criteria
-- “Override and mark done” with user reason
-
-### Recipes / Templates
-- Recipe library (private + shareable later)
-- Create recipe from a table
-- Versioning + changelog
-- Suggested roles, prompts, and audit checklist per recipe
-
-### Devices / Runner
-- Register devices
-- Online/offline health and capabilities
-- Per-device permission presets
-
-### Permissions + Privacy
-- Per-table permission profile:
-  - filesystem allowed paths
-  - network allowed domains
-  - browser allowlist
-- Data handling modes:
-  - local-only artifacts (cloud stores metadata)
-  - selective upload
-  - full sync
-
-### UI/UX (Apple iOS-inspired)
-- Clean typography, soft cards, subtle shadows
-- Segmented controls for status filters
-- Timeline view for runs
-- Spotlight cards: “what changed”, “wins”, “next action”
-- Beautiful empty states + guided onboarding
-
-## Phased delivery (execute one-by-one)
-### Phase 0 — Foundations (now)
+## Phased delivery
+### Phase 0 — Foundations (DONE)
 - Project skeleton, branding, baseline UI kit
 
-### Phase 1 — Tables MVP (usable)
+### Phase 1 — Tables MVP (DONE)
 - Tables CRUD, statuses, table detail view, tasks checklist
 
-### Phase 2 — Runs + Logs
+### Phase 2 — Runs + Logs (DONE)
 - Create run objects, run timeline, manual status updates
 
-### Phase 3 — Audit gate
+### Phase 3 — Audit gate (DONE)
 - Audit report model + UI, fix loop flow
 
-### Phase 4 — Recipes
-- Recipes CRUD, apply recipe to new table
+### Phase 4 — SPOT model redesign (DONE)
+- Full UI/UX redesign: SPOT workspace, 3-panel layout, agent directory, inbox, vault
+- Two modes (DISCUSS/EXECUTE), three roles (Member/Pilot/Agent)
+- Certification pipeline: L1 verdicts, L2 reports, blockchain anchoring
 
-### Phase 5 — Devices/Runner integration
-- Device registration, runner heartbeat, run dispatch protocol
+### Phase 5 — Security + GDPR (DONE)
+- Security hardening: headers, rate limiting, auth, Zod validation
+- GDPR compliance: cookie consent, privacy policy, terms of service
+- Accessibility: WCAG AA contrast, responsive mobile design
 
-### Phase 6 — Real “Write 20 X posts” recipe
-- Writer + Editor + Auditor prompt templates + artifact export
+### Phase 6 — Production readiness (IN PROGRESS)
+- Supabase data integration (agents, inbox, vault)
+- L1/L2 agent integration
+- E2E testing (Playwright)
+- Deploy to Vercel + Base mainnet
 
-### Phase 7 — Polish + benchmark UI
-- Motion, icons, responsive, dark mode perfection
+### Phase 7 — Advanced features (PLANNED)
+- Real-time subscriptions for live message updates
+- Recipe/template system
+- Device/runner integration
+- Redis-backed rate limiting
 
-## Decisions needed (when you’re ready)
-1. Backend choice: **Supabase** (fast) vs local SQLite first.
-2. Auth scope: personal-only vs multi-user.
-3. Artifact privacy mode defaults.
+## Decisions made
+1. **Backend**: Supabase (Auth + Postgres + RLS)
+2. **Auth**: Magic link OTP via Supabase, personal accounts
+3. **Blockchain**: Base (Sepolia testnet), CertificationRegistry.sol
+4. **GDPR**: Cookie consent banner, privacy policy, terms of service
+5. **Dev server**: Webpack mode on port 4848 (avoids Turbopack root inference issues)
+6. **Deployment target**: Vercel

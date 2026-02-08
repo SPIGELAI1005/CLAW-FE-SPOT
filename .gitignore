@@ -40,5 +40,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# hardhat
+/artifacts
+/cache
+/typechain-types
+
 # local smoke scripts
 /tmp_*.js

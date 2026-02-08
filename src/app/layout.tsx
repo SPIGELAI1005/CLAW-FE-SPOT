@@ -4,6 +4,7 @@ import "./globals.css";
 import { AppShell } from "@/components/AppShell";
 import { ToastProvider } from "@/components/ui/Toast";
 import { OnboardingProvider } from "@/components/onboarding/OnboardingProvider";
+import { CookieConsent } from "@/components/gdpr/CookieConsent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,8 +20,8 @@ export const metadata: Metadata = {
   title: "CLAW:FE SPOT",
   description: "CLAW:FE SPOT — Where teams and agents meet to get things done.",
   icons: {
-    icon: "/favicon.png",
-    apple: "/icons/apple-touch-icon.png",
+    icon: "/icon.svg",
+    apple: "/apple-icon.svg",
   },
 };
 
@@ -47,6 +48,7 @@ export default function RootLayout({
             <AppShell>{children}</AppShell>
           </OnboardingProvider>
         </ToastProvider>
+        <CookieConsent />
       </body>
     </html>
   );

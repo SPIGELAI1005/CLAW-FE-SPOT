@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/Badge";
 import { CertBadge } from "@/components/ui/CertBadge";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Button } from "@/components/ui/Button";
+import { CertificateVerification } from "@/components/spot/CertificateVerification";
+import { CertificateExport } from "@/components/spot/CertificateExport";
 import { useFetch, mapDbSpot } from "@/lib/useFetch";
 import { exportJSON, exportPDF } from "@/lib/exportAudit";
 import type { CertificationStatus } from "@/lib/spotTypes";
@@ -97,12 +99,17 @@ export function VaultDetailClient({ spotId }: { spotId: string }) {
         title={`Audit: ${spot.title}`}
         subtitle="Complete audit trail for this SPOT."
       >
-        <Button as="button" variant="secondary" onClick={handleExportJSON}>
-          Export JSON
-        </Button>
-        <Button as="button" variant="secondary" onClick={handleExportPDF}>
-          Export PDF
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button as="button" variant="secondary" onClick={handleExportJSON}>
+            Export JSON
+          </Button>
+          <Button as="button" variant="secondary" onClick={handleExportPDF}>
+            Export PDF
+          </Button>
+          {certStatus === "certified" && (
+            <CertificateExport spotId={spotId} />
+          )}
+        </div>
       </PageHeader>
 
       {/* Summary */}
@@ -200,6 +207,11 @@ export function VaultDetailClient({ spotId }: { spotId: string }) {
           </div>
         )}
       </Card>
+
+      {/* Blockchain Certification */}
+      {certStatus === "certified" && (
+        <CertificateVerification spotId={spotId} />
+      )}
 
       {/* Immutable Log from messages */}
       <Card>

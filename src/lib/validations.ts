@@ -36,12 +36,17 @@ export const CreateMessageBody = z.object({
 });
 
 // ── Participants ─────────────────────────────────────────────────────
-export const AddParticipantBody = z.object({
-  agent_id: z.string().uuid().optional(),
-  user_id: z.string().uuid().optional(),
-  role: z.enum(["owner", "worker", "l1_auditor", "l2_meta_auditor"]),
-  display_name: z.string().min(1).max(200),
-});
+export const AddParticipantBody = z
+  .object({
+    agent_id: z.string().uuid().optional(),
+    user_id: z.string().uuid().optional(),
+    role: z.enum(["owner", "worker", "l1_auditor", "l2_meta_auditor"]),
+    display_name: z.string().min(1).max(200),
+  })
+  .refine((data) => data.agent_id || data.user_id, {
+    message: "Either agent_id or user_id must be provided",
+    path: ["agent_id"],
+  });
 
 // ── Agents ───────────────────────────────────────────────────────────
 export const CreateAgentBody = z.object({
@@ -85,6 +90,10 @@ export const CreateL2ReportBody = z.object({
   verdict: z.enum(["pass", "rework", "lockdown", "human_escalation"]),
   report: z.string().min(1, "Report is required").max(10000),
 });
+
+// ── Certification ─────────────────────────────────────────────────────
+// Re-export from types.ts (canonical source) for backward compatibility
+export { RevokeCertificationBody, CreateCertificationBody } from "@/lib/certification/types";
 
 // ── Profile ──────────────────────────────────────────────────────────
 export const UpdateProfileBody = z.object({

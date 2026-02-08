@@ -1,7 +1,15 @@
 /**
  * Simple in-memory sliding-window rate limiter.
- * Suitable for single-instance deployments; for production scale,
- * consider Redis-backed rate limiting (e.g. @upstash/ratelimit).
+ *
+ * LIMITATION: This store is per-process. In a multi-instance deployment
+ * (e.g. Vercel serverless, Kubernetes pods), each instance maintains its
+ * own independent map. An attacker can spread requests across instances
+ * to bypass the limit. For production, replace with Redis-backed rate
+ * limiting (e.g. @upstash/ratelimit) and set RATE_LIMIT_BACKEND=redis.
+ *
+ * PRIVACY: Rate limit keys use IP addresses from the x-forwarded-for
+ * header. These are held only in-memory (never persisted) and expire
+ * with the sliding window.
  */
 
 interface RateLimitEntry {

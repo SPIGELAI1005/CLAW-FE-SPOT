@@ -7,7 +7,7 @@ import { TopBar } from "@/components/TopBar";
 import { CommandPaletteWithTrigger } from "@/components/cli/CommandPalette";
 import { AnimatedBackground } from "@/components/background/AnimatedBackground";
 
-const BARE_ROUTES = ["/login"];
+const BARE_ROUTES = ["/login", "/about", "/security", "/verify", "/features", "/how-it-works", "/privacy", "/terms"];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

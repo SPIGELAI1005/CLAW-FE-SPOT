@@ -1,14 +1,16 @@
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { CertBadge } from "@/components/ui/CertBadge";
+import { BlockchainBadge } from "./BlockchainBadge";
 import type { Spot, L2Report } from "@/lib/spotTypes";
 
 interface CertificateViewProps {
   spot: Spot;
   l2Report?: L2Report;
+  blockchainStatus?: "valid" | "revoked" | "superseded" | "not_found" | "pending";
 }
 
-export function CertificateView({ spot, l2Report }: CertificateViewProps) {
+export function CertificateView({ spot, l2Report, blockchainStatus }: CertificateViewProps) {
   const isCertified = spot.certificationStatus === "certified";
 
   return (
@@ -33,8 +35,11 @@ export function CertificateView({ spot, l2Report }: CertificateViewProps) {
         <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
           {spot.title}
         </p>
-        <div className="mt-3">
+        <div className="mt-3 flex items-center gap-2">
           <CertBadge status={spot.certificationStatus} />
+          {isCertified && blockchainStatus && (
+            <BlockchainBadge status={blockchainStatus} />
+          )}
         </div>
       </div>
 

@@ -366,7 +366,7 @@ export function FaqClient() {
         >
           Expand all
         </button>
-        <span className="text-stone-300 dark:text-stone-600">|</span>
+        <span className="text-stone-300 dark:text-stone-500">|</span>
         <button
           onClick={collapseAll}
           className="text-xs font-medium text-amber-600 transition-colors hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"

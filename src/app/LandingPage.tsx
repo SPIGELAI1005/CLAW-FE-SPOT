@@ -77,15 +77,18 @@ export function LandingPage() {
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6">
           <Logo className="text-lg sm:text-xl" showSubtitle />
           <nav className="hidden items-center gap-8 md:flex">
-            <a href="#how-it-works" className="text-sm font-medium text-stone-500 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
+            <Link href="/how-it-works" className="text-sm font-medium text-stone-500 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
               How It Works
-            </a>
-            <a href="#features" className="text-sm font-medium text-stone-500 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
+            </Link>
+            <Link href="/features" className="text-sm font-medium text-stone-500 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
               Features
-            </a>
-            <a href="#security" className="text-sm font-medium text-stone-500 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
+            </Link>
+            <Link href="/security" className="text-sm font-medium text-stone-500 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
               Security
-            </a>
+            </Link>
+            <Link href="/about" className="text-sm font-medium text-stone-500 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100">
+              About
+            </Link>
           </nav>
           <div className="flex items-center gap-3">
             {/* Dark / Light toggle */}
@@ -126,27 +129,34 @@ export function LandingPage() {
         {isMobileMenuOpen && (
           <div className="animate-mobile-menu-in border-t border-white/10 bg-[#faf8f5]/95 backdrop-blur-2xl md:hidden dark:bg-stone-950/95">
             <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-4">
-              <a
-                href="#how-it-works"
+              <Link
+                href="/how-it-works"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="rounded-xl px-4 py-3 text-base font-medium text-stone-700 transition-colors hover:bg-amber-500/10 hover:text-amber-600 dark:text-stone-200 dark:hover:text-amber-400"
               >
                 How It Works
-              </a>
-              <a
-                href="#features"
+              </Link>
+              <Link
+                href="/features"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="rounded-xl px-4 py-3 text-base font-medium text-stone-700 transition-colors hover:bg-amber-500/10 hover:text-amber-600 dark:text-stone-200 dark:hover:text-amber-400"
               >
                 Features
-              </a>
-              <a
-                href="#security"
+              </Link>
+              <Link
+                href="/security"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="rounded-xl px-4 py-3 text-base font-medium text-stone-700 transition-colors hover:bg-amber-500/10 hover:text-amber-600 dark:text-stone-200 dark:hover:text-amber-400"
               >
                 Security
-              </a>
+              </Link>
+              <Link
+                href="/about"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="rounded-xl px-4 py-3 text-base font-medium text-stone-700 transition-colors hover:bg-amber-500/10 hover:text-amber-600 dark:text-stone-200 dark:hover:text-amber-400"
+              >
+                About
+              </Link>
               <div className="my-2 border-t border-stone-200/50 dark:border-stone-800/50" />
               <Link
                 href="/login"
@@ -208,12 +218,12 @@ export function LandingPage() {
                 <span>Start Collaborating</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ml-2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </Link>
-              <a
-                href="#how-it-works"
+              <Link
+                href="/how-it-works"
                 className="glass-btn inline-flex h-12 w-full items-center justify-center rounded-2xl border border-white/20 bg-white/15 px-6 text-sm font-semibold text-stone-700 transition-all hover:border-white/40 hover:bg-white/25 hover:shadow-lg sm:h-14 sm:w-auto sm:px-8 sm:text-base dark:border-white/10 dark:bg-white/5 dark:text-stone-200 dark:hover:bg-white/10"
               >
                 <span>See How It Works</span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -221,7 +231,7 @@ export function LandingPage() {
 
       {/* ─── Quick Start ─────────────────────────────────────────── */}
       <section className="glass-section relative py-12">
-        <div className="mx-auto max-w-4xl px-6">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
           <QuickStartTerminal />
         </div>
       </section>
@@ -232,7 +242,7 @@ export function LandingPage() {
       {/* ─── Logos / Trust bar ──────────────────────────────────── */}
       <section className="glass-section relative overflow-x-clip pb-6 pt-6 sm:pb-10 sm:pt-10">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
-          <p className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-stone-600 sm:mb-6 sm:text-xs dark:text-white/70">
+          <p className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-stone-600 sm:mb-6 sm:text-xs dark:text-stone-300">
             Built for teams that demand trust, transparency, and certified outcomes
           </p>
         </div>
@@ -306,7 +316,7 @@ export function LandingPage() {
             ].map((item) => (
               <div
                 key={item.step}
-                className="glass-card group relative !overflow-visible rounded-3xl p-8 transition-all hover:border-amber-400/20"
+                className="glass-card group relative !overflow-visible rounded-2xl p-5 transition-all hover:border-amber-400/20 sm:rounded-3xl sm:p-8"
               >
                 <div className="!absolute left-6 -top-4 z-10">
                   <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 text-xs font-bold text-white shadow-md">
@@ -316,8 +326,8 @@ export function LandingPage() {
                 <div className="mb-4 mt-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-400/20 bg-amber-500/10 text-amber-500 backdrop-blur-sm dark:border-amber-400/15 dark:bg-amber-500/[0.08] dark:text-amber-400">
                   {item.icon}
                 </div>
-                <h3 className="mb-2 text-lg font-bold text-stone-900 dark:text-white/80">{item.title}</h3>
-                <p className="text-sm leading-relaxed text-stone-600 dark:text-white/50">
+                <h3 className="mb-2 text-lg font-bold text-stone-900 dark:text-stone-200">{item.title}</h3>
+                <p className="text-sm leading-relaxed text-stone-600 dark:text-stone-400">
                   {item.description}
                 </p>
               </div>
@@ -346,8 +356,8 @@ export function LandingPage() {
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-amber-400/20 bg-amber-500/10 text-amber-500 backdrop-blur-sm dark:border-amber-400/15 dark:bg-amber-500/[0.08] dark:text-amber-400">
                   {f.icon}
                 </div>
-                <h3 className="mb-1.5 text-sm font-bold text-stone-900 dark:text-white/80">{f.title}</h3>
-                <p className="text-xs leading-relaxed text-stone-600 dark:text-white/45">
+                <h3 className="mb-1.5 text-sm font-bold text-stone-900 dark:text-stone-200">{f.title}</h3>
+                <p className="text-xs leading-relaxed text-stone-600 dark:text-stone-400">
                   {f.description}
                 </p>
               </div>
@@ -424,8 +434,8 @@ export function LandingPage() {
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-amber-400/20 bg-amber-500/10 text-amber-500 backdrop-blur-sm dark:border-amber-400/15 dark:bg-amber-500/[0.08] dark:text-amber-400">
                   {item.icon}
                 </div>
-                <h3 className="mb-1.5 text-sm font-bold text-stone-900 dark:text-white/80">{item.title}</h3>
-                <p className="text-xs leading-relaxed text-stone-600 dark:text-white/45">{item.desc}</p>
+                <h3 className="mb-1.5 text-sm font-bold text-stone-900 dark:text-stone-200">{item.title}</h3>
+                <p className="text-xs leading-relaxed text-stone-600 dark:text-stone-400">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -440,7 +450,7 @@ export function LandingPage() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
           {/* Section header */}
           <div className="mb-6 text-center">
-            <p className="text-xs font-semibold uppercase tracking-widest text-stone-600 dark:text-white/70">
+            <p className="text-xs font-semibold uppercase tracking-widest text-stone-600 dark:text-stone-300">
               Command Your Workspace
             </p>
           </div>
@@ -448,7 +458,7 @@ export function LandingPage() {
           <InteractiveTerminal />
 
           {/* Subtext */}
-          <p className="mt-3 text-center text-xs text-stone-500 dark:text-white/40">
+          <p className="mt-3 text-center text-xs text-stone-500 dark:text-stone-400">
             Try a command above, or press{" "}
             <kbd className="rounded border border-stone-600 bg-stone-800 px-1.5 py-0.5 font-mono text-[10px] text-stone-300">Ctrl+K</kbd>{" "}
             anywhere in the app.
@@ -507,17 +517,17 @@ export function LandingPage() {
                 ),
               },
             ].map((item) => (
-              <div key={item.role} className="glass-card group relative rounded-3xl p-8 transition-all hover:border-amber-400/20">
+              <div key={item.role} className="glass-card group relative rounded-2xl p-5 transition-all hover:border-amber-400/20 sm:rounded-3xl sm:p-8">
                 <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-400/20 bg-amber-500/10 text-amber-500 backdrop-blur-sm dark:border-amber-400/15 dark:bg-amber-500/[0.08] dark:text-amber-400">
                   {item.icon}
                 </div>
-                <h3 className="mb-2 text-lg font-bold text-stone-900 dark:text-white/80">{item.role}</h3>
-                <p className="mb-4 text-sm leading-relaxed text-stone-600 dark:text-white/50">
+                <h3 className="mb-2 text-lg font-bold text-stone-900 dark:text-stone-200">{item.role}</h3>
+                <p className="mb-4 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
                   {item.description}
                 </p>
                 <ul className="space-y-2">
                   {item.bullets.map((b) => (
-                    <li key={b} className="flex items-center gap-2 text-xs font-medium text-stone-700 dark:text-white/60">
+                    <li key={b} className="flex items-center gap-2 text-xs font-medium text-stone-700 dark:text-stone-400">
                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-amber-500"><path d="m5 12 5 5L20 7"/></svg>
                       {b}
                     </li>
@@ -545,14 +555,14 @@ export function LandingPage() {
               <div className="relative z-10 mb-4 inline-flex rounded-xl bg-sky-100 px-3 py-1.5 text-xs font-bold text-sky-700 dark:bg-sky-900/50 dark:text-sky-300">
                 DISCUSS
               </div>
-              <h3 className="mb-2 text-xl font-bold text-stone-900 sm:mb-3 sm:text-2xl dark:text-white/80">Talk freely</h3>
-              <p className="mb-6 text-sm leading-relaxed text-stone-600 dark:text-white/50">
+              <h3 className="mb-2 text-xl font-bold text-stone-900 sm:mb-3 sm:text-2xl dark:text-stone-200">Talk freely</h3>
+              <p className="mb-6 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
                 Chat and voice discussion only. No tool execution, no data access beyond what&apos;s explicitly shared.
                 Perfect for brainstorming, planning, and alignment.
               </p>
               <ul className="space-y-2">
                 {["Chat & voice transcription", "Safe exploration", "No tool execution", "Build consensus first"].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm text-stone-700 dark:text-white/60">
+                  <li key={item} className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-400">
                     <div className="h-1.5 w-1.5 rounded-full bg-sky-400" />
                     {item}
                   </li>
@@ -564,14 +574,14 @@ export function LandingPage() {
               <div className="relative z-10 mb-4 inline-flex rounded-xl bg-amber-100 px-3 py-1.5 text-xs font-bold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
                 EXECUTE
               </div>
-              <h3 className="mb-2 text-xl font-bold text-stone-900 sm:mb-3 sm:text-2xl dark:text-white/80">Act with confidence</h3>
-              <p className="mb-6 text-sm leading-relaxed text-stone-600 dark:text-white/50">
+              <h3 className="mb-2 text-xl font-bold text-stone-900 sm:mb-3 sm:text-2xl dark:text-stone-200">Act with confidence</h3>
+              <p className="mb-6 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
                 Tools allowed only via policy. L1 Auditor gates every step in real-time.
                 L2 Meta-Auditor certifies the final outcome. Every action is logged immutably.
               </p>
               <ul className="space-y-2">
                 {["Policy-gated tool execution", "Real-time L1 supervision", "Immutable audit trail", "L2 final certification"].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm text-stone-700 dark:text-white/60">
+                  <li key={item} className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-400">
                     <div className="h-1.5 w-1.5 rounded-full bg-amber-400" />
                     {item}
                   </li>
@@ -590,7 +600,7 @@ export function LandingPage() {
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
               Ready to <span className="gradient-text-animated">collaborate with confidence?</span>
             </h2>
-            <p className="mx-auto mt-3 max-w-lg text-sm text-stone-600 sm:mt-4 sm:text-base dark:text-white/50">
+            <p className="mx-auto mt-3 max-w-lg text-sm text-stone-600 sm:mt-4 sm:text-base dark:text-stone-400">
               Join teams using CLAW:FE SPOT to produce audited, certified outcomes
               with AI agents they can trust.
             </p>
@@ -611,10 +621,36 @@ export function LandingPage() {
       <footer className="relative z-[1] border-t border-stone-200/50 py-8 sm:py-12 dark:border-stone-800/50">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-            <Logo className="text-lg" showSubtitle />
-            <p className="text-xs text-stone-400 dark:text-stone-600">
-              &copy; {new Date().getFullYear()} CLAW:FE SPOT. Supervised AI collaboration with audited outcomes.
-            </p>
+            <div className="flex items-center gap-3">
+              <Logo className="text-lg" showSubtitle />
+              <div className="flex items-center gap-2">
+                <a
+                  href="https://x.com/CO_FE_X"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg text-stone-400 transition-colors hover:bg-stone-200/50 hover:text-stone-700 dark:text-stone-500 dark:hover:bg-stone-700/50 dark:hover:text-stone-200"
+                  aria-label="Follow us on X"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a
+                  href="mailto:spigelai@gmail.com"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg text-stone-400 transition-colors hover:bg-stone-200/50 hover:text-stone-700 dark:text-stone-500 dark:hover:bg-stone-700/50 dark:hover:text-stone-200"
+                  aria-label="Email us"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </a>
+              </div>
+            </div>
+            <div className="flex flex-col items-center gap-2 sm:items-end">
+              <p className="text-xs text-stone-500 dark:text-stone-400">
+                &copy; {new Date().getFullYear()} CLAW:FE SPOT. Supervised AI collaboration with audited outcomes.
+              </p>
+              <div className="flex gap-4 text-xs text-stone-400 dark:text-stone-500">
+                <Link href="/privacy" className="underline underline-offset-2 transition-colors hover:text-stone-600 dark:hover:text-stone-300">Privacy Policy</Link>
+                <Link href="/terms" className="underline underline-offset-2 transition-colors hover:text-stone-600 dark:hover:text-stone-300">Terms of Service</Link>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
@@ -888,7 +924,7 @@ function InteractiveTerminal() {
         {/* Terminal output area */}
         <div
           ref={scrollRef}
-          className="max-h-[320px] overflow-y-auto px-6 pt-4 pb-2 font-mono text-sm leading-relaxed scrollbar-thin scrollbar-track-transparent scrollbar-thumb-stone-700"
+          className="max-h-[320px] overflow-y-auto px-4 pt-4 pb-2 font-mono text-xs leading-relaxed scrollbar-thin scrollbar-track-transparent scrollbar-thumb-stone-700 sm:px-6 sm:text-sm"
         >
           {lines.map((line, i) => {
             if (line.type === "comment") {
@@ -950,7 +986,7 @@ function InteractiveTerminal() {
         </div>
 
         {/* Suggestion chips */}
-        <div className="flex flex-wrap items-center gap-2 border-t border-white/5 px-4 py-2.5">
+        <div className="flex flex-wrap items-center gap-1.5 border-t border-white/5 px-3 py-2.5 sm:gap-2 sm:px-4">
           <span className="text-[10px] font-medium uppercase tracking-wider text-stone-600">Try:</span>
           {SUGGESTED_COMMANDS.map((cmd) => (
             <button
@@ -1014,7 +1050,7 @@ function QuickStartTerminal() {
     <div className="w-full">
       {/* Section header */}
       <div className="mb-6 text-center">
-        <p className="text-xs font-semibold uppercase tracking-widest text-stone-600 dark:text-white/70">
+        <p className="text-xs font-semibold uppercase tracking-widest text-stone-600 dark:text-stone-300">
           Quick Start
         </p>
       </div>
@@ -1056,7 +1092,7 @@ function QuickStartTerminal() {
         </div>
 
         {/* Code area */}
-        <div className="relative px-6 py-5 font-mono text-sm leading-relaxed">
+        <div className="relative overflow-x-auto px-4 py-5 font-mono text-xs leading-relaxed sm:px-6 sm:text-sm">
           <div className="text-emerald-400/70">{active.comment}</div>
           <div className="mt-2 flex items-center gap-2">
             <span className="select-none text-stone-500">$</span>
@@ -1079,7 +1115,7 @@ function QuickStartTerminal() {
       </div>
 
       {/* Subtext */}
-      <p className="mt-3 text-center text-xs text-stone-400 dark:text-stone-500">
+      <p className="mt-3 text-center text-xs text-stone-500 dark:text-stone-400">
         Works on macOS, Windows &amp; Linux. Or use{" "}
         <kbd className="rounded border border-stone-300 bg-white px-1.5 py-0.5 font-mono text-[10px] dark:border-stone-700 dark:bg-stone-800">Ctrl+K</kbd>{" "}
         inside the app for the built-in terminal.

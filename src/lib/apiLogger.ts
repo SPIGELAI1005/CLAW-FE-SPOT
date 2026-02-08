@@ -1,6 +1,10 @@
 /**
  * Structured request logging for API routes.
- * Logs method, path, status, duration, and optional user ID.
+ *
+ * PRIVACY: No user IDs, secrets, or PII are included in log entries.
+ * Only method, path, status, duration, and correlation ID are logged.
+ * If caller identification is needed for debugging, pass a one-way
+ * hash of the user ID (never the raw UUID).
  */
 
 interface LogContext {
@@ -8,7 +12,6 @@ interface LogContext {
   path: string;
   status: number;
   durationMs: number;
-  userId?: string;
   correlationId: string;
   error?: string;
 }
@@ -24,7 +27,6 @@ export function logRequest(context: LogContext) {
     path: context.path,
     status: context.status,
     durationMs: context.durationMs,
-    ...(context.userId ? { userId: context.userId } : {}),
     ...(context.error ? { error: context.error } : {}),
   };
 

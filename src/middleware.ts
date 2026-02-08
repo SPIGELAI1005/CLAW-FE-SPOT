@@ -10,14 +10,27 @@ function getEnv(): { url: string; anon: string } | null {
   return { url, anon };
 }
 
-/** Routes that require authentication — redirect to /login if no session. */
-const PROTECTED_PREFIXES = ["/dashboard", "/spots", "/agents", "/inbox", "/vault", "/settings", "/cli", "/roles", "/faq"];
+/** Routes that require authentication: redirect to /login if no session. */
+const PROTECTED_PREFIXES = ["/dashboard", "/spots", "/agents", "/inbox", "/vault", "/settings", "/cli", "/roles", "/faq", "/certifications", "/api/admin"];
 
 /** Routes that must stay public (even if they share a prefix with protected ones). */
-const PUBLIC_ROUTES = new Set(["/", "/login", "/auth/callback", "/logout"]);
+const PUBLIC_ROUTES = new Set(["/", "/login", "/auth/callback", "/logout", "/about", "/security", "/verify", "/features", "/how-it-works", "/privacy", "/terms"]);
+
+/**
+ * Public API exceptions for certification verification:
+ *  - GET  /api/certifications/<fingerprint>/public   (verify by fingerprint)
+ *  - POST /api/certifications/verify                 (verify by raw JSON)
+ * Both are unauthenticated, rate-limited endpoints.
+ */
+function isPublicApi(pathname: string) {
+  if (/^\/api\/certifications\/[^/]+\/public\/?$/.test(pathname)) return true;
+  if (pathname === "/api/certifications/verify") return true;
+  return false;
+}
 
 function isProtected(pathname: string) {
   if (PUBLIC_ROUTES.has(pathname)) return false;
+  if (isPublicApi(pathname)) return false;
   return PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
 }
 
@@ -27,9 +40,9 @@ function applySecurityHeaders(response: NextResponse) {
   response.headers.set("X-Frame-Options", "DENY");
   // Prevent MIME-sniffing
   response.headers.set("X-Content-Type-Options", "nosniff");
-  // Referrer policy — send origin only on cross-origin
+  // Referrer policy: send origin only on cross-origin
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-  // Permissions-Policy — disable sensitive APIs
+  // Permissions-Policy: disable sensitive APIs
   response.headers.set(
     "Permissions-Policy",
     "camera=(), microphone=(), geolocation=(), interest-cohort=()",
