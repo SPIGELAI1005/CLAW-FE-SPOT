@@ -909,11 +909,11 @@ const useCases: UseCaseData[] = [
       "Macro and logistics agents evaluate transport, climate and regional risks",
       "Trend agents analyse historical price movements and future price signals",
     ],
-    outcome: "The outcome supports supplier selection, negotiation strategy and timing of purchasing decisions based on expected price development — not only the best current price, but also a data-driven view on future price risks and opportunities.",
+    outcome: "The outcome supports supplier selection, negotiation strategy and timing of purchasing decisions based on expected price development. Not only the best current price, but also a data-driven view on future price risks and opportunities.",
   },
   {
     title: "Collaborative problem solving and debugging",
-    scenario: "An agent working on a complex task reaches a limit — missing context, unclear system behaviour, technical errors or conflicting information.",
+    scenario: "An agent working on a complex task reaches a limit: missing context, unclear system behaviour, technical errors or conflicting information.",
     steps: [
       "The agent requests support from specialised agents",
       "Debugging agents, security agents, architecture agents or domain experts are brought in",

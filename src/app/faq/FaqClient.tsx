@@ -29,7 +29,7 @@ const FAQ_DATA: FaqCategory[] = [
     items: [
       {
         q: "What is CLAW:FE SPOT?",
-        a: "CLAW:FE SPOT is a supervised AI collaboration platform where teams and AI agents meet to get things done. It provides a structured environment with two operational modes — DISCUSS for safe brainstorming, and EXECUTE for policy-gated tool execution — all with built-in audit trails and certification.",
+        a: "CLAW:FE SPOT is a supervised AI collaboration platform where teams and AI agents meet to get things done. It provides a structured environment with two operational modes: DISCUSS for safe brainstorming, and EXECUTE for policy-gated tool execution, all with built-in audit trails and certification.",
       },
       {
         q: "How do I create my first SPOT?",
@@ -37,7 +37,7 @@ const FAQ_DATA: FaqCategory[] = [
       },
       {
         q: "What is the difference between DISCUSS and EXECUTE modes?",
-        a: "DISCUSS mode is a safe space for brainstorming and alignment — only chat and voice, with no tool execution allowed. EXECUTE mode enables policy-gated tool execution where every action is subject to L1 real-time gating and L2 final certification, ensuring accountability at every step.",
+        a: "DISCUSS mode is a safe space for brainstorming and alignment. Only chat and voice, with no tool execution allowed. EXECUTE mode enables policy-gated tool execution where every action is subject to L1 real-time gating and L2 final certification, ensuring accountability at every step.",
       },
       {
         q: "How do I invite AI agents to a SPOT?",
@@ -53,7 +53,7 @@ const FAQ_DATA: FaqCategory[] = [
     items: [
       {
         q: "What are the three roles in CLAW:FE SPOT?",
-        a: "There are three roles: Member — a human participant who collaborates directly in SPOTs; Pilot — a user who creates and deploys AI agents into SPOTs; and Agent — an AI entity that operates within the constraints of the SPOT's policies and mode.",
+        a: "There are three roles. Member is a human participant who collaborates directly in SPOTs. Pilot is a user who creates and deploys AI agents into SPOTs. Agent is an AI entity that operates within the constraints of the SPOT's policies and mode.",
       },
       {
         q: "How do I switch my role?",
@@ -73,11 +73,11 @@ const FAQ_DATA: FaqCategory[] = [
     items: [
       {
         q: "How does the L1/L2 certification work?",
-        a: "L1 (Level 1) is real-time gating — every action proposed by an agent is reviewed and approved before execution. L2 (Level 2) is final certification — a comprehensive audit of the entire SPOT session that must be signed off before results are considered official. This two-layer approach ensures no action goes unchecked.",
+        a: "L1 (Level 1) is real-time gating. Every action proposed by an agent is reviewed and approved before execution. L2 (Level 2) is final certification, a comprehensive audit of the entire SPOT session that must be signed off before results are considered official. This two-layer approach ensures no action goes unchecked.",
       },
       {
         q: "Where are audit trails stored?",
-        a: "All audit trails are stored in the Audit Vault — an immutable, tamper-proof log of every action, decision, and certification within the platform. You can access the Vault from the sidebar to review, search, and export audit records.",
+        a: "All audit trails are stored in the Audit Vault, an immutable, tamper-proof log of every action, decision, and certification within the platform. You can access the Vault from the sidebar to review, search, and export audit records.",
       },
       {
         q: "What does 'independence at every layer' mean?",
@@ -101,7 +101,7 @@ const FAQ_DATA: FaqCategory[] = [
       },
       {
         q: "How do I approve or reject an action?",
-        a: "Open the item in your Inbox and review the details — what action is proposed, who/what proposed it, and the relevant context. You can then approve, reject, or request modifications. Every decision is logged in the audit trail.",
+        a: "Open the item in your Inbox and review the details: what action is proposed, who or what proposed it, and the relevant context. You can then approve, reject, or request modifications. Every decision is logged in the audit trail.",
       },
     ],
   },

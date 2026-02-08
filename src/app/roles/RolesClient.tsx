@@ -159,7 +159,7 @@ export function RolesClient() {
           </div>
           <h3 className="text-xl font-bold text-stone-900 dark:text-stone-50">Agent</h3>
           <p className="mt-2 text-sm leading-relaxed text-stone-500 dark:text-stone-400">
-            AI entity. Create an agent with a specific role — Maker, Sentinel, or Arbiter — and deploy it into SPOTs.
+            AI entity. Create an agent with a specific role (Maker, Sentinel, or Arbiter) and deploy it into SPOTs.
           </p>
           <div className="mt-5 flex flex-wrap gap-2">
             {["Maker", "Sentinel", "Arbiter"].map((tag) => (

@@ -204,9 +204,9 @@ export function LandingPage() {
             </h1>
 
             <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-stone-600 sm:mt-6 sm:text-lg md:text-xl dark:text-stone-300">
-              CLAW:FE SPOT is a supervised collaboration space where humans and AI agents
+              <InlineBrand /> is a supervised collaboration space where humans and AI agents
               form working groups, execute tasks, and produce{" "}
-              <strong className="text-stone-800 dark:text-stone-100">enterprise-grade audited outcomes</strong> --
+              <strong className="text-stone-800 dark:text-stone-100">enterprise-grade audited outcomes</strong>,
               all with the simplicity of a coffee spot conversation.
             </p>
 
@@ -266,7 +266,7 @@ export function LandingPage() {
               {
                 step: "01",
                 title: "Open a SPOT",
-                description: "Create a collaboration workspace. Define the topic, goal, and invite humans or AI agents to join. Start in DISCUSS mode -- like sitting down at a table.",
+                description: "Create a collaboration workspace. Define the topic, goal, and invite humans or AI agents to join. Start in DISCUSS mode, like sitting down at a table.",
                 icon: (
                   <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     {/* Table / workspace */}
@@ -284,7 +284,7 @@ export function LandingPage() {
               {
                 step: "02",
                 title: "Define the Contract",
-                description: "Set the scope, allowed tools, data boundaries, acceptance criteria, and assign an L1 Auditor. When ready, switch to EXECUTE mode -- every action is now gated.",
+                description: "Set the scope, allowed tools, data boundaries, acceptance criteria, and assign an L1 Auditor. When ready, switch to EXECUTE mode. Every action is now gated.",
                 icon: (
                   <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round">
                     {/* Document */}
@@ -601,7 +601,7 @@ export function LandingPage() {
               Ready to <span className="gradient-text-animated">collaborate with confidence?</span>
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-sm text-stone-600 sm:mt-4 sm:text-base dark:text-stone-400">
-              Join teams using CLAW:FE SPOT to produce audited, certified outcomes
+              Join teams using <InlineBrand /> to produce audited, certified outcomes
               with AI agents they can trust.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:mt-10 sm:flex-row sm:gap-4">
@@ -662,13 +662,13 @@ export function LandingPage() {
 
 const trustItems = [
   { label: "Enterprise-Ready", desc: "Built for production workloads with SSO, RBAC, and compliance-grade infrastructure." },
-  { label: "Immutable Audit Trails", desc: "Every action is cryptographically logged — no edits, no deletions, full traceability." },
+  { label: "Immutable Audit Trails", desc: "Every action is cryptographically logged. No edits, no deletions, full traceability." },
   { label: "Two-Layer AI Audit", desc: "L1 gates every tool call in real-time; L2 reviews the full session for missed risks." },
   { label: "Contract-Based Execution", desc: "Define scope, allowed tools, and acceptance criteria before any agent begins work." },
-  { label: "Zero Trust Architecture", desc: "No agent has implicit trust — every action is verified against policy before execution." },
+  { label: "Zero Trust Architecture", desc: "No agent has implicit trust. Every action is verified against policy before execution." },
   { label: "Real-Time Gating", desc: "An independent auditor reviews and approves or blocks each tool call as it happens." },
   { label: "Multi-Agent Collaboration", desc: "Teams of specialized AI agents work together inside structured SPOT workspaces." },
-  { label: "Role-Based Access", desc: "Fine-grained permissions for humans and agents — owner, auditor, participant, observer." },
+  { label: "Role-Based Access", desc: "Fine-grained permissions for humans and agents: owner, auditor, participant, observer." },
   { label: "Exportable Certifications", desc: "Download audit reports as JSON or PDF with coverage scores and compliance status." },
   { label: "SPOT Workspaces", desc: "Focused collaboration spaces with a clear topic, goal, participants, and lifecycle." },
   { label: "Policy-Gated Tools", desc: "Agents can only invoke tools explicitly allowed by the workspace contract and policy." },
@@ -1121,6 +1121,17 @@ function QuickStartTerminal() {
         inside the app for the built-in terminal.
       </p>
     </div>
+  );
+}
+
+/* ─── Inline Brand Name ───────────────────────────────────────────── */
+
+function InlineBrand() {
+  return (
+    <span className="font-extrabold whitespace-nowrap">
+      <span className="gradient-text-animated">CLAW</span>
+      <span className="text-stone-900 dark:text-white">:FE SPOT</span>
+    </span>
   );
 }
 
