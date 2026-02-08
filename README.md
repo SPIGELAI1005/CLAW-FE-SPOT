@@ -87,6 +87,18 @@ npm test           # Run Vitest
 - **404 page**: Custom branded design with gradient badge and quick navigation links
 - **Dashboard**: Animated background in daily brief section, professional coffee icons, collapsible sidebar
 
+## Email Templates
+
+Custom Supabase email templates live in `supabase/email-templates/`:
+
+| Template | File | Subject |
+|---|---|---|
+| Magic Link | `magic-link.html` | Sign in to CLAW:FE SPOT |
+| Confirm Signup | `confirm-signup.html` | Welcome to CLAW:FE SPOT — Confirm your email |
+| Reset Password | `reset-password.html` | Reset your CLAW:FE SPOT password |
+
+Apply via **Supabase Dashboard** → Authentication → Email Templates, or via `config.toml`. See `supabase/email-templates/README.md` for full instructions.
+
 ## Project Structure
 
 ```
@@ -136,4 +148,9 @@ supabase/
   migrations/
     001_lock_immutable_tables.sql    # Audit trail lockdown
     002_spot_model.sql               # SPOT model extension
+  email-templates/
+    magic-link.html                  # Magic link sign-in email
+    confirm-signup.html              # Signup confirmation email
+    reset-password.html              # Password reset email
+    README.md                        # Setup instructions
 ```

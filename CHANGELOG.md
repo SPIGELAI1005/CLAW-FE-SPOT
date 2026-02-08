@@ -6,6 +6,22 @@ Format inspired by Keep a Changelog.
 
 ---
 
+## [2026-02-08] Supabase Email Templates
+
+### Added
+- **Custom email templates** (`supabase/email-templates/`)
+  - `magic-link.html` — branded magic link sign-in email
+  - `confirm-signup.html` — welcome & email confirmation email with feature highlights and quick-start guide
+  - `reset-password.html` — password reset email
+  - `README.md` — setup instructions (Supabase Dashboard, `config.toml`, Management API), template variables, and design tokens
+  - All templates feature: CLAW:FE SPOT logo with amber "CLAW" accent, three-role badges (Member / Pilot / Agent), dark mode support via `@media (prefers-color-scheme: dark)`, Outlook MSO compatibility, and consistent design tokens matching the app
+
+### Fixed
+- **Email logo rendering** — replaced CSS `background-clip: text` gradient (not supported by email clients) with solid amber color (`#d97706`) for "CLAW" text across all templates
+- **Broken lock icon** — replaced base64-encoded SVG `<img>` in magic-link template with Unicode lock character (`&#128274;`) for universal email client compatibility
+
+---
+
 ## [2026-02-08] Help & FAQ, Custom 404, Mobile Bar Redesign & Dashboard Refinements
 
 ### Added

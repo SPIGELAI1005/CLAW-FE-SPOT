@@ -1,6 +1,6 @@
 # CLAW:FE SPOT — Project Status
 
-_Last updated: 2026-02-08_
+_Last updated: 2026-02-08 (v2)_
 
 ## TL;DR
 - Full Next.js 16 app with 19 page routes and 15 API routes.
@@ -21,6 +21,7 @@ _Last updated: 2026-02-08_
   - `/roles`, `/roles/member`, `/roles/pilot`, `/roles/agent/new` — role switcher
   - `/cli`, `/cli/auth` — CLI reference, terminal auth
 - **Custom 404 page** — branded design for any non-existent route
+- **Custom email templates** (`supabase/email-templates/`) — magic link, signup confirmation, password reset; branded with app design tokens, dark mode support, Outlook compatibility
 - **API routes**: `/api/spots`, `/api/agents`, `/api/inbox`, `/api/vault`, `/api/profile`
 - **Middleware**: rate limiting, auth protection, security headers (CSP, HSTS, etc.)
 - **Design system**: glass effects, animated gradients, dark/light mode, responsive mobile layout
@@ -39,10 +40,11 @@ _Last updated: 2026-02-08_
 - Environment variables (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`) must be set for auth.
 
 ## Next actions
-1. Apply `supabase/schema.sql` + migrations in Supabase SQL editor
-2. Login via `/login` and confirm all routes load correctly
-3. End-to-end smoke test: create SPOT → join → discuss → switch to execute → certify
-4. Connect real Supabase data for agents, inbox, vault (currently using demo data)
-5. Implement actual L1/L2 agent gating logic (currently UI placeholders)
-6. Add Playwright E2E tests
-7. Real-time subscriptions for live message updates in SPOT workspace
+1. Apply email templates in Supabase Dashboard (Authentication → Email Templates) — see `supabase/email-templates/README.md`
+2. Apply `supabase/schema.sql` + migrations in Supabase SQL editor
+3. Login via `/login` and confirm all routes load correctly
+4. End-to-end smoke test: create SPOT → join → discuss → switch to execute → certify
+5. Connect real Supabase data for agents, inbox, vault (currently using demo data)
+6. Implement actual L1/L2 agent gating logic (currently UI placeholders)
+7. Add Playwright E2E tests
+8. Real-time subscriptions for live message updates in SPOT workspace
