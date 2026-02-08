@@ -13,12 +13,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isBare = pathname === "/" || BARE_ROUTES.some((r) => pathname.startsWith(r));
 
+
   if (isBare) {
     return <>{children}</>;
   }
 
   return (
-    <div className="relative flex h-screen overflow-hidden text-stone-900 dark:text-stone-50">
+    <div className="relative flex h-screen overflow-hidden bg-[var(--app-bg)] text-stone-900 dark:text-stone-50">
       {/* Subtle animated canvas behind the app */}
       <AnimatedBackground minimal config={{ intensity: "low", nodeCount: 14, motionSpeed: 0.7 }} />
       {/* Skip to main content (a11y) */}

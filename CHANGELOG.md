@@ -6,6 +6,61 @@ Format inspired by Keep a Changelog.
 
 ---
 
+## [2026-02-08] Help & FAQ, Custom 404, Mobile Bar Redesign & Dashboard Refinements
+
+### Added
+- **Help & FAQ page** (`src/app/faq/`)
+  - Comprehensive FAQ with 6 categorized sections: Getting Started, Roles & Personas, Security & Certification, Inbox & Approvals, CLI & Terminal, Account & Settings
+  - Real-time search filtering across all questions and answers
+  - Expand all / Collapse all controls with smooth CSS grid-template-rows accordion animation
+  - Bug report form with subject, category dropdown (9 categories), description, steps to reproduce, and submission feedback
+  - Added to sidebar navigation below Settings with question-mark icon
+  - Includes `loading.tsx` and `error.tsx` for proper loading/error states
+
+- **Custom 404 page** (`src/app/not-found.tsx`)
+  - Branded design with animated gradient "404" badge
+  - Glass-styled navigation buttons (Go to Dashboard, Back to Home)
+  - Quick navigation links section (SPOTs, Agents, Inbox, Vault, Settings, Help & FAQ)
+  - Replaces Next.js default unstyled 404 page
+
+- **Help & FAQ in TopBar dropdown** — added "Help & FAQ" link to the user menu dropdown with separator
+
+### Changed
+- **Mobile bottom tab bar** (`BottomTabs.tsx`) — completely redesigned
+  - **Dual-state icons**: outline when inactive, filled with translucent background when active
+  - **Home icon**: house with coffee steam wisps rising from chimney (active state)
+  - **SPOTs icon**: workspace table with dashed coffee-ring "spot" accent (active state)
+  - **Inbox icon**: tray with notification dot accent (active state)
+  - **Vault icon**: shield with checkmark + subtle certified glow ring (active state)
+  - **More icon**: custom crab with claws, body, eyes, and legs (CLAW brand motif)
+  - **Active state**: persona-colored glow backdrop, 110% icon scale, bold label, gradient indicator pill
+  - **Tab bar**: frosted glass with `backdrop-blur-2xl`, soft top shadow, safe-area bottom padding for notched devices
+  - "More" tab now highlights for `/faq`, `/cli`, `/roles`, `/agents` in addition to `/settings`
+
+- **Top bar** (`TopBar.tsx`) — refined icon design
+  - All icons extracted into named components for clarity and consistency
+  - Terminal icon with subtle coffee steam curls (brand accent)
+  - Moon icon with tiny star accent for dark mode
+  - Dark/light toggle hover glows amber instead of generic grey
+  - Button text ("New SPOT", "Terminal") hides on very narrow mobile screens (<380px)
+  - Dropdown hover states use amber tones matching brand palette
+
+- **Middleware** (`src/middleware.ts`)
+  - Added `/faq` to `PROTECTED_PREFIXES` — unauthenticated users now properly redirect to login
+
+- **Settings page** (`src/app/settings/SettingsClient.tsx`)
+  - Added `catch` clauses to both load and save `fetch` calls — prevents unhandled promise rejection errors during dev server HMR restarts
+
+- **Dashboard refinements** (from previous session)
+  - Animated background (tables and crabs) in "Your daily brief" section
+  - Gradient fade transition on animation container
+  - Collapsible sidebar with crab icon in collapsed state
+  - Professional coffee icons (espresso, latte, cappuccino) in greeting
+  - Summary message starts with "You have..."
+  - Discuss and Execute cards equal height
+
+---
+
 ## [2026-02-07] Responsive Design, Mobile Menu & Login Page Redesign
 
 ### Added
@@ -275,7 +330,7 @@ Format inspired by Keep a Changelog.
 - `PATCH /api/tables/[id]/runs` action `simulate`
   - appends timeline events to `log`
   - moves run status to `needs_review`
-- Runs UI shows the timeline log and includes “Simulate” for queued runs
+- Runs UI shows the timeline log and includes "Simulate" for queued runs
 
 ### Notes
 - Supabase schema updates live in `OPENCLAW_CAFE/claw-fe/supabase/schema.sql` and must be applied manually.

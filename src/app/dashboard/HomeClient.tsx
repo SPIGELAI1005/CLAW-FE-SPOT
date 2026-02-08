@@ -2,11 +2,83 @@
 
 import Link from "next/link";
 import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { AnimatedBackground } from "@/components/background/AnimatedBackground";
 import { SpotCard } from "@/components/spot/SpotCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useFetch, mapDbSpot } from "@/lib/useFetch";
 import type { Spot, Persona } from "@/lib/spotTypes";
+
+/* Professional coffee SVG icons — one per time of day */
+function EspressoIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Steam wisps */}
+      <path d="M22 12c0-4 4-6 4-10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.4">
+        <animate attributeName="d" values="M22 12c0-4 4-6 4-10;M22 14c-1-4 5-6 3-10;M22 12c0-4 4-6 4-10" dur="3s" repeatCount="indefinite" />
+      </path>
+      <path d="M30 10c0-3 3-5 3-8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.3">
+        <animate attributeName="d" values="M30 10c0-3 3-5 3-8;M30 12c1-3 2-5 4-8;M30 10c0-3 3-5 3-8" dur="2.5s" repeatCount="indefinite" />
+      </path>
+      {/* Cup */}
+      <rect x="14" y="22" width="28" height="24" rx="4" stroke="currentColor" strokeWidth="2" fill="currentColor" fillOpacity="0.08" />
+      {/* Handle */}
+      <path d="M42 28c4 0 7 2 7 6s-3 6-7 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
+      {/* Coffee surface */}
+      <ellipse cx="28" cy="28" rx="11" ry="2.5" fill="currentColor" fillOpacity="0.15" />
+      {/* Saucer */}
+      <ellipse cx="28" cy="50" rx="18" ry="4" stroke="currentColor" strokeWidth="2" fill="currentColor" fillOpacity="0.05" />
+    </svg>
+  );
+}
+
+function LatteIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Steam */}
+      <path d="M26 14c-1-4 3-7 2-11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.35">
+        <animate attributeName="d" values="M26 14c-1-4 3-7 2-11;M26 16c1-4 2-7 4-11;M26 14c-1-4 3-7 2-11" dur="3.2s" repeatCount="indefinite" />
+      </path>
+      <path d="M34 12c0-3 2-5 1-9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.25">
+        <animate attributeName="d" values="M34 12c0-3 2-5 1-9;M34 14c-1-3 3-5 2-9;M34 12c0-3 2-5 1-9" dur="2.8s" repeatCount="indefinite" />
+      </path>
+      {/* Tall glass */}
+      <path d="M18 20h24l-3 32H21z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="currentColor" fillOpacity="0.06" />
+      {/* Milk layer */}
+      <path d="M20 34h20" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" opacity="0.3" />
+      {/* Latte art (leaf) */}
+      <path d="M28 24c-3 2-4 4-2 6 2-2 5-3 6-1-1-3-2-5-4-5z" fill="currentColor" fillOpacity="0.2" />
+      {/* Saucer */}
+      <ellipse cx="30" cy="54" rx="16" ry="3.5" stroke="currentColor" strokeWidth="2" fill="currentColor" fillOpacity="0.05" />
+    </svg>
+  );
+}
+
+function CappuccinoIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Steam */}
+      <path d="M24 16c0-4 3-6 3-10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.35">
+        <animate attributeName="d" values="M24 16c0-4 3-6 3-10;M24 18c-1-4 4-6 2-10;M24 16c0-4 3-6 3-10" dur="2.6s" repeatCount="indefinite" />
+      </path>
+      <path d="M32 14c1-3 2-6 1-9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.3">
+        <animate attributeName="d" values="M32 14c1-3 2-6 1-9;M32 16c-1-3 3-6 2-9;M32 14c1-3 2-6 1-9" dur="3s" repeatCount="indefinite" />
+      </path>
+      {/* Wide cup */}
+      <path d="M12 24h32l-4 24H16z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="currentColor" fillOpacity="0.08" />
+      {/* Handle */}
+      <path d="M44 28c4 0 6 3 6 6s-2 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
+      {/* Foam top — rounded */}
+      <ellipse cx="28" cy="24" rx="16" ry="4" fill="currentColor" fillOpacity="0.1" stroke="currentColor" strokeWidth="1.5" />
+      {/* Cocoa sprinkle dots */}
+      <circle cx="24" cy="23" r="0.8" fill="currentColor" opacity="0.3" />
+      <circle cx="30" cy="22" r="0.6" fill="currentColor" opacity="0.25" />
+      <circle cx="27" cy="25" r="0.7" fill="currentColor" opacity="0.2" />
+      <circle cx="33" cy="24" r="0.5" fill="currentColor" opacity="0.25" />
+      {/* Saucer */}
+      <ellipse cx="28" cy="50" rx="18" ry="4" stroke="currentColor" strokeWidth="2" fill="currentColor" fillOpacity="0.05" />
+    </svg>
+  );
+}
 
 interface ProfileResponse {
   persona?: string;
@@ -21,7 +93,12 @@ interface InboxResponse {
 }
 
 export function HomeClient() {
-  const greeting = getGreeting();
+  const { text: greeting, coffee } = getGreeting();
+
+  const CoffeeIcon =
+    coffee === "espresso" ? EspressoIcon
+    : coffee === "latte" ? LatteIcon
+    : CappuccinoIcon;
   const { data: profileData } = useFetch<ProfileResponse>("/api/profile");
   const { data: spotsData, isLoading: isSpotsLoading } = useFetch<SpotsResponse>("/api/spots");
   const { data: inboxData, isLoading: isInboxLoading } = useFetch<InboxResponse>("/api/inbox");
@@ -40,32 +117,33 @@ export function HomeClient() {
   return (
     <div className="space-y-8">
       {/* Hero greeting */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-stone-900 to-stone-800 px-8 py-10 text-white shadow-xl dark:from-stone-900 dark:to-stone-950">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-stone-100 to-white px-8 py-10 shadow-xl dark:from-stone-900 dark:to-stone-950">
+        {/* Full animated background (tables, crabs, steam) — shifted right with gradient fade */}
+        <div className="absolute inset-y-0 left-[30%] right-0 z-0 opacity-50 dark:opacity-70" style={{ maskImage: "linear-gradient(to right, transparent 0%, black 30%)", WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 30%)" }}>
+          <AnimatedBackground
+            config={{ intensity: "medium", nodeCount: 12, motionSpeed: 0.8, enableSteam: true }}
+            canvasClassName="absolute inset-0 h-full w-full pointer-events-none"
+            compact
+          />
+        </div>
         <div className="absolute -right-8 -top-8 h-40 w-40 rounded-full bg-amber-500/10 blur-2xl" />
         <div className="absolute -bottom-12 -left-12 h-48 w-48 rounded-full bg-orange-500/10 blur-3xl" />
 
-        <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="relative z-[1] flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="mb-1 text-sm font-medium text-amber-400/80">
+            <div className="mb-1 text-sm font-medium text-amber-600 dark:text-amber-400/80">
               Your daily brief
             </div>
-            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl" data-onboarding="dashboard-title">
-              {greeting} ☕
+            <h1 className="flex items-center gap-3 text-2xl font-bold tracking-tight text-stone-900 sm:text-3xl dark:text-white" data-onboarding="dashboard-title">
+              {greeting}
+              <CoffeeIcon className="inline-block h-9 w-9 text-amber-600 dark:text-amber-400" />
             </h1>
-            <p className="mt-2 max-w-md text-sm leading-relaxed text-stone-300">
+            <p className="mt-2 max-w-md text-sm leading-relaxed text-stone-500 dark:text-stone-300">
               {isSpotsLoading
                 ? "Loading your workspace..."
-                : `${activeSpots.length} active SPOT${activeSpots.length !== 1 ? "s" : ""}, ${pendingItems.length} pending approval${pendingItems.length !== 1 ? "s" : ""}${certifiedCount > 0 ? `, and ${certifiedCount} certified` : ""}. Let's make progress.`}
+                : `You have ${activeSpots.length} active SPOT${activeSpots.length !== 1 ? "s" : ""}, ${pendingItems.length} pending approval${pendingItems.length !== 1 ? "s" : ""}${certifiedCount > 0 ? `, and ${certifiedCount} certified` : ""}. Let's make progress.`}
             </p>
           </div>
-          <Button
-            as="link"
-            href="/spots/new"
-            variant="primary"
-            className="!bg-gradient-to-r !from-amber-500 !to-orange-600 !shadow-md !shadow-amber-600/20 hover:!shadow-lg hover:!shadow-amber-600/30"
-          >
-            + New SPOT
-          </Button>
         </div>
       </div>
 
@@ -115,8 +193,8 @@ export function HomeClient() {
       {/* Modes */}
       <section className="grid gap-4 sm:grid-cols-2">
         {/* DISCUSS */}
-        <Link href="/spots?filter=discuss" className="group">
-          <div className="relative overflow-hidden rounded-2xl border border-sky-200/60 bg-gradient-to-br from-sky-50 to-white p-6 transition-all group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:shadow-sky-500/5 dark:border-sky-800/30 dark:from-sky-950/20 dark:to-stone-900">
+        <Link href="/spots?filter=discuss" className="group h-full">
+          <div className="relative h-full overflow-hidden rounded-2xl border border-sky-200/60 bg-gradient-to-br from-sky-50 to-white p-6 transition-all group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:shadow-sky-500/5 dark:border-sky-800/30 dark:from-sky-950/20 dark:to-stone-900">
             <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-sky-200/20 blur-2xl dark:bg-sky-500/5" />
             <div className="relative flex items-start justify-between">
               <div>
@@ -145,8 +223,8 @@ export function HomeClient() {
         </Link>
 
         {/* EXECUTE */}
-        <Link href="/spots?filter=execute" className="group">
-          <div className="relative overflow-hidden rounded-2xl border border-amber-200/60 bg-gradient-to-br from-amber-50 to-white p-6 transition-all group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:shadow-amber-500/5 dark:border-amber-800/30 dark:from-amber-950/20 dark:to-stone-900">
+        <Link href="/spots?filter=execute" className="group h-full">
+          <div className="relative h-full overflow-hidden rounded-2xl border border-amber-200/60 bg-gradient-to-br from-amber-50 to-white p-6 transition-all group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:shadow-amber-500/5 dark:border-amber-800/30 dark:from-amber-950/20 dark:to-stone-900">
             <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-amber-200/20 blur-2xl dark:bg-amber-500/5" />
             <div className="relative flex items-start justify-between">
               <div>
@@ -247,7 +325,7 @@ export function HomeClient() {
                       <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-amber-100 text-[10px] font-bold text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
                         {(item.type as string)?.includes("l2") ? "L2" : "L1"}
                       </span>
-                      <span className="text-sm font-semibold">
+                      <span className="text-sm font-semibold text-stone-900 dark:text-stone-100">
                         {item.title as string}
                       </span>
                     </div>
@@ -324,9 +402,9 @@ export function HomeClient() {
   );
 }
 
-function getGreeting() {
+function getGreeting(): { text: string; coffee: "espresso" | "latte" | "cappuccino" } {
   const hour = new Date().getHours();
-  if (hour < 12) return "Good morning";
-  if (hour < 17) return "Good afternoon";
-  return "Good evening";
+  if (hour < 12) return { text: "Good morning", coffee: "espresso" };
+  if (hour < 17) return { text: "Good afternoon", coffee: "latte" };
+  return { text: "Good evening", coffee: "cappuccino" };
 }

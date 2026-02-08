@@ -15,6 +15,30 @@ import { CrabCoffeeToggle } from "@/components/ui/CrabCoffeeToggle";
 
 export function LandingPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+
+  // Sync dark mode from DOM / localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved === "dark" || (!saved && document.documentElement.classList.contains("dark"))) {
+      setIsDark(true);
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
+  const toggleDark = useCallback(() => {
+    setIsDark((prev) => {
+      const next = !prev;
+      if (next) {
+        document.documentElement.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem("theme", "light");
+      }
+      return next;
+    });
+  }, []);
 
   // Close mobile menu on resize to desktop
   useEffect(() => {
@@ -30,6 +54,18 @@ export function LandingPage() {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [isMobileMenuOpen]);
+
+  // Update --glass-scroll CSS property on scroll for moving light reflections
+  useEffect(() => {
+    function onScroll() {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+      document.documentElement.style.setProperty("--glass-scroll", String(progress));
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div className="relative min-h-screen text-stone-900 dark:text-stone-50">
@@ -52,6 +88,19 @@ export function LandingPage() {
             </a>
           </nav>
           <div className="flex items-center gap-3">
+            {/* Dark / Light toggle */}
+            <button
+              onClick={toggleDark}
+              className="flex h-9 w-9 items-center justify-center rounded-xl text-stone-500 transition-colors hover:bg-stone-200/50 hover:text-stone-800 dark:text-stone-400 dark:hover:bg-stone-700/50 dark:hover:text-stone-100"
+              title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+              aria-label="Toggle dark mode"
+            >
+              {isDark ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+              )}
+            </button>
             <Link
               href="/login"
               className="hidden text-sm font-medium text-stone-600 transition-colors hover:text-stone-900 sm:block dark:text-stone-400 dark:hover:text-white"
@@ -60,9 +109,9 @@ export function LandingPage() {
             </Link>
             <Link
               href="/login"
-              className="hidden h-10 items-center rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 px-5 text-sm font-semibold text-white shadow-md shadow-amber-500/20 transition-all hover:shadow-lg hover:shadow-amber-500/30 sm:inline-flex"
+              className="glass-btn glass-btn-orange hidden h-10 items-center rounded-xl bg-gradient-to-r from-amber-500/90 to-orange-600/90 px-5 text-sm font-semibold text-white shadow-md shadow-amber-500/20 transition-all hover:from-amber-500 hover:to-orange-600 hover:shadow-lg hover:shadow-amber-500/30 sm:inline-flex"
             >
-              Get Started
+              <span>Get Started</span>
             </Link>
             {/* Mobile toggle — crab ↔ coffee cup */}
             <CrabCoffeeToggle
@@ -109,9 +158,9 @@ export function LandingPage() {
               <Link
                 href="/login"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="mt-1 flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-base font-bold text-white shadow-lg shadow-amber-500/20"
+                className="glass-btn glass-btn-orange mt-1 flex h-12 items-center justify-center rounded-xl bg-gradient-to-r from-amber-500/90 to-orange-600/90 text-base font-bold text-white shadow-lg shadow-amber-500/20 transition-all hover:from-amber-500 hover:to-orange-600"
               >
-                Get Started
+                <span>Get Started</span>
               </Link>
             </nav>
           </div>
@@ -122,13 +171,12 @@ export function LandingPage() {
       <section className="relative overflow-hidden pt-24 pb-16 sm:pt-40 sm:pb-32">
 
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
-          <div className="mt-[3vh] mb-4 inline-flex items-center gap-2 rounded-full border border-amber-200/60 bg-amber-50/80 px-3 py-1 text-[10px] font-semibold text-amber-800 backdrop-blur-sm sm:mt-[5vh] sm:mb-6 sm:px-4 sm:py-1.5 sm:text-xs dark:border-amber-800/40 dark:bg-amber-950/40 dark:text-amber-300">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-            Supervised AI Collaboration Platform
+          <div className="mt-[3vh] mb-4 flex justify-center sm:mt-[5vh] sm:mb-6">
+            <Logo className="text-2xl sm:text-3xl" showSubtitle />
           </div>
 
           {/* Frosted glass hero card */}
-          <div className="rounded-2xl border border-white/[0.085] bg-white/[0.075] px-5 py-8 shadow-2xl shadow-stone-900/[0.04] ring-1 ring-white/[0.04] backdrop-blur-[3px] sm:rounded-3xl sm:px-12 sm:py-16 dark:border-white/[0.035] dark:bg-white/[0.02] dark:shadow-black/15">
+          <div className="glass-card rounded-2xl px-5 py-8 sm:rounded-3xl sm:px-12 sm:py-16">
             <h1 className="text-3xl font-extrabold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
             Where teams and
             <br />
@@ -155,16 +203,16 @@ export function LandingPage() {
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:mt-10 sm:flex-row sm:gap-4">
               <Link
                 href="/login"
-                className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 px-6 text-sm font-bold text-white shadow-xl shadow-amber-500/25 transition-all hover:shadow-2xl hover:shadow-amber-500/30 sm:h-14 sm:w-auto sm:px-8 sm:text-base"
+                className="glass-btn glass-btn-orange inline-flex h-12 w-full items-center justify-center rounded-2xl bg-gradient-to-r from-amber-500/90 to-orange-600/90 px-6 text-sm font-bold text-white shadow-xl shadow-amber-500/25 transition-all hover:from-amber-500 hover:to-orange-600 hover:shadow-2xl hover:shadow-amber-500/30 sm:h-14 sm:w-auto sm:px-8 sm:text-base"
               >
-                Start Collaborating
+                <span>Start Collaborating</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ml-2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </Link>
               <a
                 href="#how-it-works"
-                className="inline-flex h-12 w-full items-center justify-center rounded-2xl border border-white/40 bg-white/30 px-6 text-sm font-semibold text-stone-700 backdrop-blur-sm transition-all hover:border-white/60 hover:bg-white/50 hover:shadow-lg sm:h-14 sm:w-auto sm:px-8 sm:text-base dark:border-white/15 dark:bg-white/10 dark:text-stone-200 dark:hover:bg-white/20"
+                className="glass-btn inline-flex h-12 w-full items-center justify-center rounded-2xl border border-white/20 bg-white/15 px-6 text-sm font-semibold text-stone-700 transition-all hover:border-white/40 hover:bg-white/25 hover:shadow-lg sm:h-14 sm:w-auto sm:px-8 sm:text-base dark:border-white/10 dark:bg-white/5 dark:text-stone-200 dark:hover:bg-white/10"
               >
-                See How It Works
+                <span>See How It Works</span>
               </a>
             </div>
           </div>
@@ -172,7 +220,7 @@ export function LandingPage() {
       </section>
 
       {/* ─── Quick Start ─────────────────────────────────────────── */}
-      <section className="relative border-y border-white/[0.085] bg-white/[0.075] py-12 shadow-2xl shadow-stone-900/[0.04] ring-1 ring-white/[0.04] backdrop-blur-[3px] dark:border-white/[0.035] dark:bg-white/[0.02] dark:shadow-black/15">
+      <section className="glass-section relative py-12">
         <div className="mx-auto max-w-4xl px-6">
           <QuickStartTerminal />
         </div>
@@ -182,9 +230,9 @@ export function LandingPage() {
       <div className="h-16 sm:h-24" />
 
       {/* ─── Logos / Trust bar ──────────────────────────────────── */}
-      <section className="relative overflow-x-clip border-y border-white/[0.085] bg-white/[0.075] py-6 shadow-2xl shadow-stone-900/[0.04] ring-1 ring-white/[0.04] backdrop-blur-[3px] sm:py-10 dark:border-white/[0.035] dark:bg-white/[0.02] dark:shadow-black/15">
+      <section className="glass-section relative overflow-x-clip pb-6 pt-6 sm:pb-10 sm:pt-10">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
-          <p className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-white/80 sm:mb-6 sm:text-xs dark:text-white/70">
+          <p className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-stone-600 sm:mb-6 sm:text-xs dark:text-white/70">
             Built for teams that demand trust, transparency, and certified outcomes
           </p>
         </div>
@@ -258,18 +306,18 @@ export function LandingPage() {
             ].map((item) => (
               <div
                 key={item.step}
-                className="group relative rounded-3xl border border-white/[0.12] bg-white/[0.07] p-8 shadow-2xl shadow-stone-900/[0.06] ring-1 ring-white/[0.05] backdrop-blur-[6px] transition-all hover:border-amber-400/20 hover:bg-white/[0.1] hover:shadow-amber-500/[0.08] dark:border-white/[0.06] dark:bg-white/[0.03] dark:shadow-black/20 dark:ring-white/[0.03] dark:hover:border-amber-400/15 dark:hover:bg-white/[0.05]"
+                className="glass-card group relative !overflow-visible rounded-3xl p-8 transition-all hover:border-amber-400/20"
               >
-                <div className="absolute -top-4 left-8">
-                  <span className="rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1 text-xs font-bold text-white shadow-md">
+                <div className="!absolute left-6 -top-4 z-10">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 text-xs font-bold text-white shadow-md">
                     {item.step}
                   </span>
                 </div>
-                <div className="mb-4 mt-2 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-400/20 bg-amber-500/10 text-amber-500 backdrop-blur-sm dark:border-amber-400/15 dark:bg-amber-500/[0.08] dark:text-amber-400">
+                <div className="mb-4 mt-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-400/20 bg-amber-500/10 text-amber-500 backdrop-blur-sm dark:border-amber-400/15 dark:bg-amber-500/[0.08] dark:text-amber-400">
                   {item.icon}
                 </div>
-                <h3 className="mb-2 text-lg font-bold text-white/90 dark:text-white/80">{item.title}</h3>
-                <p className="text-sm leading-relaxed text-white/60 dark:text-white/50">
+                <h3 className="mb-2 text-lg font-bold text-stone-900 dark:text-white/80">{item.title}</h3>
+                <p className="text-sm leading-relaxed text-stone-600 dark:text-white/50">
                   {item.description}
                 </p>
               </div>
@@ -293,13 +341,13 @@ export function LandingPage() {
             {features.map((f) => (
               <div
                 key={f.title}
-                className="group rounded-2xl border border-white/[0.12] bg-white/[0.07] p-6 shadow-xl shadow-stone-900/[0.04] ring-1 ring-white/[0.05] backdrop-blur-[6px] transition-all hover:border-amber-400/20 hover:bg-white/[0.1] hover:shadow-amber-500/[0.06] dark:border-white/[0.06] dark:bg-white/[0.03] dark:shadow-black/15 dark:ring-white/[0.03] dark:hover:border-amber-400/15 dark:hover:bg-white/[0.05]"
+                className="glass-card group rounded-2xl p-6 transition-all hover:border-amber-400/20"
               >
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-amber-400/20 bg-amber-500/10 text-amber-500 backdrop-blur-sm dark:border-amber-400/15 dark:bg-amber-500/[0.08] dark:text-amber-400">
                   {f.icon}
                 </div>
-                <h3 className="mb-1.5 text-sm font-bold text-white/90 dark:text-white/80">{f.title}</h3>
-                <p className="text-xs leading-relaxed text-white/55 dark:text-white/45">
+                <h3 className="mb-1.5 text-sm font-bold text-stone-900 dark:text-white/80">{f.title}</h3>
+                <p className="text-xs leading-relaxed text-stone-600 dark:text-white/45">
                   {f.description}
                 </p>
               </div>
@@ -372,12 +420,12 @@ export function LandingPage() {
                 ),
               },
             ].map((item) => (
-              <div key={item.title} className="rounded-2xl border border-white/[0.12] bg-white/[0.07] p-6 shadow-xl shadow-stone-900/[0.04] ring-1 ring-white/[0.05] backdrop-blur-[6px] transition-all hover:border-amber-400/20 hover:bg-white/[0.1] hover:shadow-amber-500/[0.06] dark:border-white/[0.06] dark:bg-white/[0.03] dark:shadow-black/15 dark:ring-white/[0.03] dark:hover:border-amber-400/15 dark:hover:bg-white/[0.05]">
+              <div key={item.title} className="glass-card rounded-2xl p-6 transition-all hover:border-amber-400/20">
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-amber-400/20 bg-amber-500/10 text-amber-500 backdrop-blur-sm dark:border-amber-400/15 dark:bg-amber-500/[0.08] dark:text-amber-400">
                   {item.icon}
                 </div>
-                <h3 className="mb-1.5 text-sm font-bold text-white/90 dark:text-white/80">{item.title}</h3>
-                <p className="text-xs leading-relaxed text-white/55 dark:text-white/45">{item.desc}</p>
+                <h3 className="mb-1.5 text-sm font-bold text-stone-900 dark:text-white/80">{item.title}</h3>
+                <p className="text-xs leading-relaxed text-stone-600 dark:text-white/45">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -388,11 +436,11 @@ export function LandingPage() {
       <div className="h-10 sm:h-16" />
 
       {/* ─── CLI Showcase ────────────────────────────────────────── */}
-      <section className="relative z-[1] border-y border-white/[0.085] bg-white/[0.075] py-8 shadow-2xl shadow-stone-900/[0.04] ring-1 ring-white/[0.04] backdrop-blur-[3px] sm:py-12 dark:border-white/[0.035] dark:bg-white/[0.02] dark:shadow-black/15">
+      <section className="glass-section relative z-[1] py-8 sm:py-12">
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
           {/* Section header */}
           <div className="mb-6 text-center">
-            <p className="text-xs font-semibold uppercase tracking-widest text-white/80 dark:text-white/70">
+            <p className="text-xs font-semibold uppercase tracking-widest text-stone-600 dark:text-white/70">
               Command Your Workspace
             </p>
           </div>
@@ -400,7 +448,7 @@ export function LandingPage() {
           <InteractiveTerminal />
 
           {/* Subtext */}
-          <p className="mt-3 text-center text-xs text-white/50 dark:text-white/40">
+          <p className="mt-3 text-center text-xs text-stone-500 dark:text-white/40">
             Try a command above, or press{" "}
             <kbd className="rounded border border-stone-600 bg-stone-800 px-1.5 py-0.5 font-mono text-[10px] text-stone-300">Ctrl+K</kbd>{" "}
             anywhere in the app.
@@ -459,17 +507,17 @@ export function LandingPage() {
                 ),
               },
             ].map((item) => (
-              <div key={item.role} className="group relative rounded-3xl border border-white/[0.12] bg-white/[0.07] p-8 shadow-2xl shadow-stone-900/[0.06] ring-1 ring-white/[0.05] backdrop-blur-[6px] transition-all hover:border-amber-400/20 hover:bg-white/[0.1] hover:shadow-amber-500/[0.08] dark:border-white/[0.06] dark:bg-white/[0.03] dark:shadow-black/20 dark:ring-white/[0.03] dark:hover:border-amber-400/15 dark:hover:bg-white/[0.05]">
+              <div key={item.role} className="glass-card group relative rounded-3xl p-8 transition-all hover:border-amber-400/20">
                 <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-400/20 bg-amber-500/10 text-amber-500 backdrop-blur-sm dark:border-amber-400/15 dark:bg-amber-500/[0.08] dark:text-amber-400">
                   {item.icon}
                 </div>
-                <h3 className="mb-2 text-lg font-bold text-white/90 dark:text-white/80">{item.role}</h3>
-                <p className="mb-4 text-sm leading-relaxed text-white/60 dark:text-white/50">
+                <h3 className="mb-2 text-lg font-bold text-stone-900 dark:text-white/80">{item.role}</h3>
+                <p className="mb-4 text-sm leading-relaxed text-stone-600 dark:text-white/50">
                   {item.description}
                 </p>
                 <ul className="space-y-2">
                   {item.bullets.map((b) => (
-                    <li key={b} className="flex items-center gap-2 text-xs font-medium text-white/70 dark:text-white/60">
+                    <li key={b} className="flex items-center gap-2 text-xs font-medium text-stone-700 dark:text-white/60">
                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-amber-500"><path d="m5 12 5 5L20 7"/></svg>
                       {b}
                     </li>
@@ -493,18 +541,18 @@ export function LandingPage() {
           </div>
 
           <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
-            <div className="rounded-2xl border border-white/[0.12] bg-white/[0.07] p-6 shadow-2xl shadow-stone-900/[0.06] ring-1 ring-white/[0.05] backdrop-blur-[6px] transition-all hover:border-amber-400/20 hover:bg-white/[0.1] hover:shadow-amber-500/[0.08] sm:rounded-3xl sm:p-10 dark:border-white/[0.06] dark:bg-white/[0.03] dark:shadow-black/20 dark:ring-white/[0.03] dark:hover:border-amber-400/15 dark:hover:bg-white/[0.05]">
-              <div className="mb-4 inline-flex rounded-xl bg-sky-100 px-3 py-1.5 text-xs font-bold text-sky-700 dark:bg-sky-900/50 dark:text-sky-300">
+            <div className="glass-card rounded-2xl p-6 transition-all hover:border-amber-400/20 sm:rounded-3xl sm:p-10">
+              <div className="relative z-10 mb-4 inline-flex rounded-xl bg-sky-100 px-3 py-1.5 text-xs font-bold text-sky-700 dark:bg-sky-900/50 dark:text-sky-300">
                 DISCUSS
               </div>
-              <h3 className="mb-2 text-xl font-bold text-white/90 sm:mb-3 sm:text-2xl dark:text-white/80">Talk freely</h3>
-              <p className="mb-6 text-sm leading-relaxed text-white/60 dark:text-white/50">
+              <h3 className="mb-2 text-xl font-bold text-stone-900 sm:mb-3 sm:text-2xl dark:text-white/80">Talk freely</h3>
+              <p className="mb-6 text-sm leading-relaxed text-stone-600 dark:text-white/50">
                 Chat and voice discussion only. No tool execution, no data access beyond what&apos;s explicitly shared.
                 Perfect for brainstorming, planning, and alignment.
               </p>
               <ul className="space-y-2">
                 {["Chat & voice transcription", "Safe exploration", "No tool execution", "Build consensus first"].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm text-white/70 dark:text-white/60">
+                  <li key={item} className="flex items-center gap-2 text-sm text-stone-700 dark:text-white/60">
                     <div className="h-1.5 w-1.5 rounded-full bg-sky-400" />
                     {item}
                   </li>
@@ -512,18 +560,18 @@ export function LandingPage() {
               </ul>
             </div>
 
-            <div className="rounded-2xl border border-white/[0.12] bg-white/[0.07] p-6 shadow-2xl shadow-stone-900/[0.06] ring-1 ring-white/[0.05] backdrop-blur-[6px] transition-all hover:border-amber-400/20 hover:bg-white/[0.1] hover:shadow-amber-500/[0.08] sm:rounded-3xl sm:p-10 dark:border-white/[0.06] dark:bg-white/[0.03] dark:shadow-black/20 dark:ring-white/[0.03] dark:hover:border-amber-400/15 dark:hover:bg-white/[0.05]">
-              <div className="mb-4 inline-flex rounded-xl bg-amber-100 px-3 py-1.5 text-xs font-bold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
+            <div className="glass-card rounded-2xl p-6 transition-all hover:border-amber-400/20 sm:rounded-3xl sm:p-10">
+              <div className="relative z-10 mb-4 inline-flex rounded-xl bg-amber-100 px-3 py-1.5 text-xs font-bold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
                 EXECUTE
               </div>
-              <h3 className="mb-2 text-xl font-bold text-white/90 sm:mb-3 sm:text-2xl dark:text-white/80">Act with confidence</h3>
-              <p className="mb-6 text-sm leading-relaxed text-white/60 dark:text-white/50">
+              <h3 className="mb-2 text-xl font-bold text-stone-900 sm:mb-3 sm:text-2xl dark:text-white/80">Act with confidence</h3>
+              <p className="mb-6 text-sm leading-relaxed text-stone-600 dark:text-white/50">
                 Tools allowed only via policy. L1 Auditor gates every step in real-time.
                 L2 Meta-Auditor certifies the final outcome. Every action is logged immutably.
               </p>
               <ul className="space-y-2">
                 {["Policy-gated tool execution", "Real-time L1 supervision", "Immutable audit trail", "L2 final certification"].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm text-white/70 dark:text-white/60">
+                  <li key={item} className="flex items-center gap-2 text-sm text-stone-700 dark:text-white/60">
                     <div className="h-1.5 w-1.5 rounded-full bg-amber-400" />
                     {item}
                   </li>
@@ -537,21 +585,21 @@ export function LandingPage() {
       {/* ─── CTA ───────────────────────────────────────────────── */}
       <section className="relative z-[1] py-16 sm:py-24 md:py-32">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
-          <div className="rounded-2xl border border-white/[0.12] bg-white/[0.07] px-5 py-10 shadow-2xl shadow-stone-900/[0.06] ring-1 ring-white/[0.05] backdrop-blur-[6px] sm:rounded-3xl sm:px-16 sm:py-16 dark:border-white/[0.06] dark:bg-white/[0.03] dark:shadow-black/20 dark:ring-white/[0.03]">
+          <div className="glass-card rounded-2xl px-5 py-10 sm:rounded-3xl sm:px-16 sm:py-16">
             <div className="pointer-events-none absolute -top-20 left-1/2 h-40 w-[400px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-3xl" />
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
               Ready to <span className="gradient-text-animated">collaborate with confidence?</span>
             </h2>
-            <p className="mx-auto mt-3 max-w-lg text-sm text-white/60 sm:mt-4 sm:text-base dark:text-white/50">
+            <p className="mx-auto mt-3 max-w-lg text-sm text-stone-600 sm:mt-4 sm:text-base dark:text-white/50">
               Join teams using CLAW:FE SPOT to produce audited, certified outcomes
               with AI agents they can trust.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:mt-10 sm:flex-row sm:gap-4">
               <Link
                 href="/login"
-                className="inline-flex h-12 w-full items-center justify-center rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 px-6 text-sm font-bold text-white shadow-xl shadow-amber-500/25 transition-all hover:shadow-2xl hover:shadow-amber-500/30 sm:h-14 sm:w-auto sm:px-8 sm:text-base"
+                className="glass-btn glass-btn-orange inline-flex h-12 w-full items-center justify-center rounded-2xl bg-gradient-to-r from-amber-500/90 to-orange-600/90 px-6 text-sm font-bold text-white shadow-xl shadow-amber-500/25 transition-all hover:from-amber-500 hover:to-orange-600 hover:shadow-2xl hover:shadow-amber-500/30 sm:h-14 sm:w-auto sm:px-8 sm:text-base"
               >
-                Get Started Free
+                <span>Get Started Free</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ml-2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </Link>
             </div>
@@ -966,7 +1014,7 @@ function QuickStartTerminal() {
     <div className="w-full">
       {/* Section header */}
       <div className="mb-6 text-center">
-        <p className="text-xs font-semibold uppercase tracking-widest text-white/80 dark:text-white/70">
+        <p className="text-xs font-semibold uppercase tracking-widest text-stone-600 dark:text-white/70">
           Quick Start
         </p>
       </div>

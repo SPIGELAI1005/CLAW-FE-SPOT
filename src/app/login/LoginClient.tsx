@@ -72,15 +72,15 @@ export function LoginClient() {
         <div className="mb-6 flex justify-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-medium text-stone-500 backdrop-blur-sm transition-all hover:border-amber-400/30 hover:bg-white/20 hover:text-amber-600 dark:border-white/10 dark:bg-white/5 dark:text-stone-400 dark:hover:border-amber-400/20 dark:hover:text-amber-400"
+            className="glass-btn inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/08 px-4 py-1.5 text-xs font-medium text-stone-500 transition-all hover:border-amber-400/30 hover:bg-white/15 hover:text-amber-600 dark:border-white/05 dark:bg-white/03 dark:text-stone-400 dark:hover:border-amber-400/20 dark:hover:text-amber-400"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-            Back to home
+            <span>Back to home</span>
           </Link>
         </div>
 
         {/* Brand + Login — frosted glass container like the hero card */}
-        <div className="rounded-2xl border border-white/[0.085] bg-white/[0.075] px-5 py-8 shadow-2xl shadow-stone-900/[0.04] ring-1 ring-white/[0.04] backdrop-blur-[3px] sm:rounded-3xl sm:px-10 sm:py-12 dark:border-white/[0.035] dark:bg-white/[0.02] dark:shadow-black/15">
+        <div className="glass-card rounded-2xl px-5 py-8 sm:rounded-3xl sm:px-10 sm:py-12">
           {/* Brand */}
           <div className="mb-8 text-center">
             <Link href="/" className="mb-6 inline-flex flex-col items-center">
@@ -89,8 +89,9 @@ export function LoginClient() {
             <h1 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
               Welcome back!
             </h1>
-            <p className="mx-auto mt-3 max-w-xs text-sm leading-relaxed text-white/60 dark:text-white/50">
-              Where teams and agents meet to get things done.
+            <p className="mx-auto mt-3 max-w-xs text-sm leading-relaxed text-stone-500 dark:text-white/50">
+              Where teams and<br />
+              <span className="gradient-text-animated bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 bg-clip-text text-transparent">AI Agents meet to get things done.</span>
             </p>
           </div>
 
@@ -117,9 +118,9 @@ export function LoginClient() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 px-5 text-sm font-semibold text-white shadow-md shadow-amber-500/25 transition-all hover:shadow-lg hover:shadow-amber-500/30 disabled:opacity-60"
+                className="glass-btn glass-btn-orange inline-flex h-12 w-full items-center justify-center rounded-xl bg-gradient-to-r from-amber-500/90 to-orange-600/90 px-5 text-sm font-semibold text-white shadow-md shadow-amber-500/25 transition-all hover:from-amber-500 hover:to-orange-600 hover:shadow-lg hover:shadow-amber-500/30 disabled:opacity-60"
               >
-                {isLoading ? "Sending..." : "Send magic link"}
+                <span>{isLoading ? "Sending..." : "Send magic link"}</span>
               </button>
               {status && (
                 <div

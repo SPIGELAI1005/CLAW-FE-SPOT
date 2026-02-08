@@ -38,6 +38,8 @@ export function SettingsClient() {
           setProfile(data);
           setDisplayName(data.display_name ?? "");
         }
+      } catch {
+        // Network error — server may be restarting or unavailable
       } finally {
         setIsLoading(false);
       }
@@ -93,6 +95,8 @@ export function SettingsClient() {
         setSaved(true);
         setTimeout(() => setSaved(false), 3000);
       }
+    } catch {
+      // Network error
     } finally {
       setIsSaving(false);
     }

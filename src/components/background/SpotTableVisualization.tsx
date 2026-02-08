@@ -44,7 +44,7 @@ import {
 
 const TOP_OFFSET = 200; // space below the 72px header for the auditor station
 
-export default function SpotTableVisualization() {
+export default function SpotTableVisualization({ canvasClassName, compact }: { canvasClassName?: string; compact?: boolean } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
 
@@ -58,14 +58,25 @@ export default function SpotTableVisualization() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let w = window.innerWidth;
-    let h = window.innerHeight;
+    /* ── Sizing ─────────────────────────────────────────────────── */
+    let w: number, h: number;
+    const getSize = () => {
+      if (compact && canvas.parentElement) {
+        return { w: canvas.parentElement.clientWidth, h: canvas.parentElement.clientHeight };
+      }
+      return { w: window.innerWidth, h: window.innerHeight };
+    };
+
+    const dims = getSize();
+    w = dims.w;
+    h = dims.h;
     const isMobile = w < 640;
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = window.innerWidth;
-      h = window.innerHeight;
+      const dims = getSize();
+      w = dims.w;
+      h = dims.h;
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       canvas.style.width = `${w}px`;
@@ -75,28 +86,29 @@ export default function SpotTableVisualization() {
     resize();
     window.addEventListener("resize", resize);
 
-    // ── Auditor Station ─────────────────────────────────────────────
+    /* ── Auditor Station (skip in compact mode) ──────────────────── */
+    const showAuditor = !compact;
     const auditorRadius = isMobile ? 50 : 65;
     const auditorX = w / 2;
-    // Center the auditor station in the TOP_OFFSET zone, below the 72px header
     const auditorY = 72 + (TOP_OFFSET - 72) / 2 + 10;
 
-    // ── Round SPOT Tables ───────────────────────────────────────────
-    const tableCount = isMobile ? 4 : w < 1024 ? 6 : 9;
-    const tableRadius = isMobile ? 40 : w < 1024 ? 50 : 55;
+    /* ── Round SPOT Tables ───────────────────────────────────────── */
+    const tableCount = compact ? (isMobile ? 2 : 3) : (isMobile ? 4 : w < 1024 ? 6 : 9);
+    const tableRadius = compact ? (isMobile ? 30 : 36) : (isMobile ? 40 : w < 1024 ? 50 : 55);
     const tables: Table[] = [];
     const margin = tableRadius * 2.5;
-    const cols = Math.ceil(Math.sqrt(tableCount * (w / (h - TOP_OFFSET))));
+    const topOffset = compact ? 0 : TOP_OFFSET;
+    const cols = Math.ceil(Math.sqrt(tableCount * (w / Math.max(h - topOffset, 1))));
     const rows = Math.ceil(tableCount / cols);
-    const cellW = (w - margin * 2) / cols;
-    const cellH = (h - TOP_OFFSET - margin * 2) / rows;
+    const cellW = (w - margin * 2) / Math.max(cols, 1);
+    const cellH = (h - topOffset - margin * 2) / Math.max(rows, 1);
 
     for (let i = 0; i < tableCount; i++) {
       const col = i % cols;
       const row = Math.floor(i / cols);
       tables.push({
         x: margin + cellW * (col + 0.5) + (Math.random() - 0.5) * cellW * 0.3,
-        y: TOP_OFFSET + margin + cellH * (row + 0.5) + (Math.random() - 0.5) * cellH * 0.3,
+        y: topOffset + margin + cellH * (row + 0.5) + (Math.random() - 0.5) * cellH * 0.3,
         radius: tableRadius + (Math.random() - 0.5) * 10,
         hue: TABLE_HUES[i % TABLE_HUES.length],
         counterTarget: Math.floor(Math.random() * 200),
@@ -105,11 +117,11 @@ export default function SpotTableVisualization() {
       });
     }
 
-    // ── Agents ──────────────────────────────────────────────────────
-    const agentCount = isMobile ? 20 : w < 1024 ? 35 : 50;
+    /* ── Agents ──────────────────────────────────────────────────── */
+    const agentCount = compact ? (isMobile ? 6 : 10) : (isMobile ? 20 : w < 1024 ? 35 : 50);
     const agents: Agent[] = [];
     for (let i = 0; i < agentCount; i++) {
-      const isCrab = Math.random() < 0.4;
+      const isCrab = compact ? Math.random() < 0.6 : Math.random() < 0.4;
       const tableIndex = Math.floor(Math.random() * tables.length);
       const table = tables[tableIndex];
       const baseExp = isCrab
@@ -140,54 +152,58 @@ export default function SpotTableVisualization() {
       });
     }
 
-    // ── Dedicated Auditor Crabs (pinned, never migrate) ─────────────
-    const baristaCrabIdx = agents.length;
-    agents.push({
-      type: "crab",
-      color: "hsla(20, 55%, 42%, 0.85)",
-      tableIndex: -1, // pinned to auditor station
-      angle: 0,
-      orbitSpeed: 0.1,
-      orbitRadius: auditorRadius + 15,
-      migrating: false,
-      migrateFrom: { x: 0, y: 0 },
-      migrateTo: { x: 0, y: 0 },
-      migrateProgress: 0,
-      migrateDuration: 0,
-      targetTableIndex: -1,
-      screenX: auditorX - auditorRadius * 0.6,
-      screenY: auditorY + 5,
-      sizeMultiplier: 1.2,
-      hat: "chef",
-      baseExpression: "happy",
-      expression: "happy",
-      eyewear: "none",
-      pinned: true,
-    });
+    /* ── Dedicated Auditor Crabs (skip in compact mode) ──────────── */
+    let baristaCrabIdx = -1;
+    let reviewerCrabIdx = -1;
+    if (showAuditor) {
+      baristaCrabIdx = agents.length;
+      agents.push({
+        type: "crab",
+        color: "hsla(20, 55%, 42%, 0.85)",
+        tableIndex: -1,
+        angle: 0,
+        orbitSpeed: 0.1,
+        orbitRadius: auditorRadius + 15,
+        migrating: false,
+        migrateFrom: { x: 0, y: 0 },
+        migrateTo: { x: 0, y: 0 },
+        migrateProgress: 0,
+        migrateDuration: 0,
+        targetTableIndex: -1,
+        screenX: auditorX - auditorRadius * 0.6,
+        screenY: auditorY + 5,
+        sizeMultiplier: 1.2,
+        hat: "chef",
+        baseExpression: "happy",
+        expression: "happy",
+        eyewear: "none",
+        pinned: true,
+      });
 
-    const reviewerCrabIdx = agents.length;
-    agents.push({
-      type: "crab",
-      color: "hsla(215, 35%, 42%, 0.85)",
-      tableIndex: -1,
-      angle: 0,
-      orbitSpeed: -0.1,
-      orbitRadius: auditorRadius + 15,
-      migrating: false,
-      migrateFrom: { x: 0, y: 0 },
-      migrateTo: { x: 0, y: 0 },
-      migrateProgress: 0,
-      migrateDuration: 0,
-      targetTableIndex: -1,
-      screenX: auditorX + auditorRadius * 0.6,
-      screenY: auditorY + 5,
-      sizeMultiplier: 1.1,
-      hat: "tophat",
-      baseExpression: "normal",
-      expression: "normal",
-      eyewear: "monocle",
-      pinned: true,
-    });
+      reviewerCrabIdx = agents.length;
+      agents.push({
+        type: "crab",
+        color: "hsla(215, 35%, 42%, 0.85)",
+        tableIndex: -1,
+        angle: 0,
+        orbitSpeed: -0.1,
+        orbitRadius: auditorRadius + 15,
+        migrating: false,
+        migrateFrom: { x: 0, y: 0 },
+        migrateTo: { x: 0, y: 0 },
+        migrateProgress: 0,
+        migrateDuration: 0,
+        targetTableIndex: -1,
+        screenX: auditorX + auditorRadius * 0.6,
+        screenY: auditorY + 5,
+        sizeMultiplier: 1.1,
+        hat: "tophat",
+        baseExpression: "normal",
+        expression: "normal",
+        eyewear: "monocle",
+        pinned: true,
+      });
+    }
 
     // ── Chat bubbles ────────────────────────────────────────────────
     const chatBubbles: ChatBubble[] = [];
@@ -202,7 +218,7 @@ export default function SpotTableVisualization() {
 
     // ── Animation loop ──────────────────────────────────────────────
     let lastTime = performance.now();
-    const agentSize = isMobile ? 7 : 9;
+    const agentSize = compact ? 7 : (isMobile ? 7 : 9);
 
     const frame = (now: number) => {
       const dt = Math.min(now - lastTime, 50);
@@ -211,56 +227,56 @@ export default function SpotTableVisualization() {
 
       ctx.clearRect(0, 0, w, h);
 
-      // ── Draw Auditor Station ────────────────────────────────────
-      drawSquareTable(ctx, auditorX, auditorY, auditorRadius);
+      // ── Draw Auditor Station (skip in compact) ──────────────────
+      if (showAuditor) {
+        drawSquareTable(ctx, auditorX, auditorY, auditorRadius);
 
-      // Labels on auditor station surface
-      ctx.font = "bold 9px 'Inter', system-ui, sans-serif";
-      ctx.fillStyle = "hsla(30, 15%, 75%, 0.6)";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText("☕ BARISTA", auditorX - auditorRadius * 0.5, auditorY - auditorRadius * 0.25);
-      ctx.fillText("🔍 AUDITOR", auditorX + auditorRadius * 0.5, auditorY - auditorRadius * 0.25);
+        ctx.font = "bold 9px 'Inter', system-ui, sans-serif";
+        ctx.fillStyle = "hsla(30, 15%, 75%, 0.6)";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("☕ BARISTA", auditorX - auditorRadius * 0.5, auditorY - auditorRadius * 0.25);
+        ctx.fillText("🔍 AUDITOR", auditorX + auditorRadius * 0.5, auditorY - auditorRadius * 0.25);
 
-      // Coffee machine on auditor table surface
-      drawCoffeeMachine(ctx, auditorX, auditorY + 5, t);
+        drawCoffeeMachine(ctx, auditorX, auditorY + 5, t);
 
-      // ── Verdicts (spawn near auditor station) ──────────────────
-      nextVerdict -= dt;
-      if (nextVerdict <= 0 && !prefersReduced) {
-        const v = AUDIT_VERDICTS[Math.floor(Math.random() * AUDIT_VERDICTS.length)];
-        verdicts.push({
-          text: v.text,
-          icon: v.icon,
-          age: 0,
-          maxAge: 3500 + Math.random() * 2000,
-          x: auditorX + (Math.random() - 0.5) * auditorRadius * 2,
-          floatY: 0,
-        });
-        if (verdicts.length > 5) verdicts.shift();
-        nextVerdict = 2500 + Math.random() * 4000;
-      }
-
-      for (let i = verdicts.length - 1; i >= 0; i--) {
-        const v = verdicts[i];
-        v.age += dt;
-        if (v.age > v.maxAge) {
-          verdicts.splice(i, 1);
-          continue;
+        // ── Verdicts ──────────────────────────────────────────────
+        nextVerdict -= dt;
+        if (nextVerdict <= 0 && !prefersReduced) {
+          const v = AUDIT_VERDICTS[Math.floor(Math.random() * AUDIT_VERDICTS.length)];
+          verdicts.push({
+            text: v.text,
+            icon: v.icon,
+            age: 0,
+            maxAge: 3500 + Math.random() * 2000,
+            x: auditorX + (Math.random() - 0.5) * auditorRadius * 2,
+            floatY: 0,
+          });
+          if (verdicts.length > 5) verdicts.shift();
+          nextVerdict = 2500 + Math.random() * 4000;
         }
-        const progress = v.age / v.maxAge;
-        const fadeIn = Math.min(progress * 6, 1);
-        const fadeOut = Math.max(1 - (progress - 0.7) / 0.3, 0);
-        const alpha = fadeIn * fadeOut * 0.85;
-        v.floatY = -progress * 30;
-        drawAuditBadge(
-          ctx,
-          v.x,
-          auditorY + auditorRadius * 0.6 + 15 + v.floatY,
-          v.text,
-          v.icon,
-          alpha,
-        );
+
+        for (let i = verdicts.length - 1; i >= 0; i--) {
+          const v = verdicts[i];
+          v.age += dt;
+          if (v.age > v.maxAge) {
+            verdicts.splice(i, 1);
+            continue;
+          }
+          const progress = v.age / v.maxAge;
+          const fadeIn = Math.min(progress * 6, 1);
+          const fadeOut = Math.max(1 - (progress - 0.7) / 0.3, 0);
+          const alpha = fadeIn * fadeOut * 0.85;
+          v.floatY = -progress * 30;
+          drawAuditBadge(
+            ctx,
+            v.x,
+            auditorY + auditorRadius * 0.6 + 15 + v.floatY,
+            v.text,
+            v.icon,
+            alpha,
+          );
+        }
       }
 
       // ── Draw round tables with counters ─────────────────────────
@@ -272,7 +288,6 @@ export default function SpotTableVisualization() {
           table.counterTarget += 1 + Math.floor(Math.random() * 15);
           table.nextIncrement = 1500 + Math.random() * 4000;
         }
-        // Smooth lerp toward target (dt * 0.05 per frame)
         table.counterDisplay = lerp(table.counterDisplay, table.counterTarget, 0.05);
         drawCounter(ctx, table.x, table.y, table.counterDisplay, table.hue, isMobile);
       }
@@ -312,7 +327,6 @@ export default function SpotTableVisualization() {
         const agent = agents[ai];
 
         if (agent.pinned) {
-          // Auditor crabs: slight orbit around their fixed position
           if (!prefersReduced) {
             agent.angle += agent.orbitSpeed * dt * 0.001;
           }
@@ -446,8 +460,8 @@ export default function SpotTableVisualization() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 0 }}
+      className={canvasClassName ?? "fixed inset-0 pointer-events-none"}
+      style={canvasClassName ? undefined : { zIndex: 0 }}
       aria-hidden="true"
     />
   );

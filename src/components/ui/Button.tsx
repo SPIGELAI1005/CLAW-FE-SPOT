@@ -48,7 +48,7 @@ export function Button(props: Props) {
     "inline-flex h-10 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed";
   const styles =
     variant === "primary"
-      ? "bg-stone-900 text-white shadow-sm hover:bg-stone-800 hover:shadow-md dark:bg-stone-50 dark:text-stone-900 dark:hover:bg-white"
+      ? "glass-btn glass-btn-orange bg-gradient-to-r from-amber-500/90 to-orange-600/90 text-white shadow-md shadow-amber-500/20 hover:from-amber-500 hover:to-orange-600 hover:shadow-lg hover:shadow-amber-500/30"
       : variant === "secondary"
         ? "border border-stone-200 bg-white hover:bg-stone-50 dark:border-stone-700 dark:bg-stone-900 dark:hover:bg-stone-800"
         : variant === "danger"
@@ -60,7 +60,7 @@ export function Button(props: Props) {
     return (
       <Link href={href} className={`${base} ${styles} ${className ?? ""}`} {...rest}>
         {isLoading && <Spinner />}
-        {children}
+        <span>{children}</span>
       </Link>
     );
   }
@@ -73,7 +73,7 @@ export function Button(props: Props) {
       {...rest}
     >
       {isLoading && <Spinner />}
-      {children}
+      <span>{children}</span>
     </button>
   );
 }

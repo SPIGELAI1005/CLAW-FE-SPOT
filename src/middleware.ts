@@ -11,7 +11,7 @@ function getEnv(): { url: string; anon: string } | null {
 }
 
 /** Routes that require authentication — redirect to /login if no session. */
-const PROTECTED_PREFIXES = ["/dashboard", "/spots", "/agents", "/inbox", "/vault", "/settings", "/cli", "/roles"];
+const PROTECTED_PREFIXES = ["/dashboard", "/spots", "/agents", "/inbox", "/vault", "/settings", "/cli", "/roles", "/faq"];
 
 /** Routes that must stay public (even if they share a prefix with protected ones). */
 const PUBLIC_ROUTES = new Set(["/", "/login", "/auth/callback", "/logout"]);

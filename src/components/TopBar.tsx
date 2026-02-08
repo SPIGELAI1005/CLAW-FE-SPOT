@@ -25,6 +25,92 @@ const personaLetter: Record<Persona, string> = {
   agent: "A",
 };
 
+/* ── Custom SVG icons ──────────────────────────────────────────────── */
+
+/** Plus icon with coffee-bean–inspired rounded form */
+function PlusIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 5v14"/>
+      <path d="M5 12h14"/>
+    </svg>
+  );
+}
+
+/** Terminal icon — CLI prompt with subtle coffee steam curl */
+function TerminalIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="4 17 10 11 4 5"/>
+      <line x1="12" x2="20" y1="19" y2="19"/>
+      {/* Subtle steam accent */}
+      <path d="M18 7c0-1.2 1-1.2 1-2.2" strokeWidth="1.25" opacity="0.4"/>
+      <path d="M20 6.5c0-1 0.8-1 0.8-1.8" strokeWidth="1.25" opacity="0.25"/>
+    </svg>
+  );
+}
+
+/** Sun icon — warm, radiant design for light mode indicator */
+function SunIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2"/>
+      <path d="M12 20v2"/>
+      <path d="m4.93 4.93 1.41 1.41"/>
+      <path d="m17.66 17.66 1.41 1.41"/>
+      <path d="M2 12h2"/>
+      <path d="M20 12h2"/>
+      <path d="m6.34 17.66-1.41 1.41"/>
+      <path d="m19.07 4.93-1.41 1.41"/>
+    </svg>
+  );
+}
+
+/** Moon icon — elegant crescent for dark mode indicator */
+function MoonIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+      {/* Star accent */}
+      <circle cx="19" cy="5" r="0.5" fill="currentColor" opacity="0.5"/>
+    </svg>
+  );
+}
+
+/** Profile icon for dropdown */
+function ProfileIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>
+  );
+}
+
+/** Role/compass icon for dropdown */
+function RoleIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+    </svg>
+  );
+}
+
+/** Sign out — elegant door-with-arrow */
+function SignOutIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+      <polyline points="16 17 21 12 16 7"/>
+      <line x1="21" x2="9" y1="12" y2="12"/>
+    </svg>
+  );
+}
+
+/* ── Component ─────────────────────────────────────────────────────── */
+
 export function TopBar() {
   const pathname = usePathname();
   const [darkMode, setDarkMode] = useState(false);
@@ -104,39 +190,35 @@ export function TopBar() {
           <Link
             href="/spots/new"
             data-onboarding="new-spot-button"
-            className="btn-gradient-animated flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold text-white shadow-md shadow-rose-500/25 transition-all hover:shadow-lg hover:shadow-rose-500/35"
+            className="glass-btn glass-btn-orange flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-500/90 to-orange-600/90 px-3 py-2 text-xs font-bold text-white shadow-md shadow-amber-500/20 transition-all hover:from-amber-500 hover:to-orange-600 hover:shadow-lg hover:shadow-amber-500/30 sm:px-4"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-            New SPOT
+            <PlusIcon />
+            <span className="hidden min-[380px]:inline">New SPOT</span>
           </Link>
 
           {/* Center: Terminal */}
           <button
             onClick={openCommandPalette}
             data-onboarding="terminal-button"
-            className="flex items-center gap-2 rounded-xl border border-stone-200/60 bg-white/50 px-4 py-1.5 text-xs font-medium text-stone-500 transition-all hover:border-stone-300 hover:bg-white/80 hover:text-stone-700 dark:border-stone-700/60 dark:bg-stone-800/50 dark:text-stone-400 dark:hover:border-stone-600 dark:hover:text-stone-200"
+            className="flex items-center gap-2 rounded-xl border border-stone-200/60 bg-white/50 px-3 py-1.5 text-xs font-medium text-stone-500 transition-all hover:border-stone-300 hover:bg-white/80 hover:text-stone-700 dark:border-stone-700/60 dark:bg-stone-800/50 dark:text-stone-400 dark:hover:border-stone-600 dark:hover:text-stone-200 sm:px-4"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
-            Terminal
+            <TerminalIcon />
+            <span className="hidden min-[380px]:inline">Terminal</span>
             <kbd className="hidden rounded border border-stone-300/60 bg-stone-100/80 px-1.5 py-0.5 font-mono text-[9px] text-stone-400 sm:inline dark:border-stone-600/60 dark:bg-stone-700/50 dark:text-stone-500">
               Ctrl+K
             </kbd>
           </button>
 
           {/* Right: Dark mode + User + Sign out */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1">
             {/* Dark / Light toggle */}
             <button
               onClick={toggleDark}
-              className="flex h-8 w-8 items-center justify-center rounded-xl text-stone-500 transition-colors hover:bg-stone-100 hover:text-stone-700 dark:text-stone-400 dark:hover:bg-stone-800 dark:hover:text-stone-200"
+              className="flex h-8 w-8 items-center justify-center rounded-xl text-stone-500 transition-all hover:bg-amber-50 hover:text-amber-600 dark:text-stone-400 dark:hover:bg-amber-950/30 dark:hover:text-amber-400"
               title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
               aria-label="Toggle dark mode"
             >
-              {darkMode ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-              )}
+              {darkMode ? <SunIcon /> : <MoonIcon />}
             </button>
 
             {/* User avatar with dropdown */}
@@ -157,18 +239,27 @@ export function TopBar() {
                     <Link
                       href="/settings"
                       onClick={() => setMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-stone-600 transition-colors hover:bg-stone-50 dark:text-stone-300 dark:hover:bg-stone-800"
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-stone-600 transition-colors hover:bg-amber-50/80 hover:text-amber-700 dark:text-stone-300 dark:hover:bg-amber-950/20 dark:hover:text-amber-400"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                      <ProfileIcon />
                       Profile &amp; Settings
                     </Link>
                     <Link
                       href="/roles"
                       onClick={() => setMenuOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-stone-600 transition-colors hover:bg-stone-50 dark:text-stone-300 dark:hover:bg-stone-800"
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-stone-600 transition-colors hover:bg-amber-50/80 hover:text-amber-700 dark:text-stone-300 dark:hover:bg-amber-950/20 dark:hover:text-amber-400"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                      <RoleIcon />
                       Switch Role
+                    </Link>
+                    <div className="mx-3 my-1 border-t border-stone-100 dark:border-stone-800" />
+                    <Link
+                      href="/faq"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-stone-600 transition-colors hover:bg-amber-50/80 hover:text-amber-700 dark:text-stone-300 dark:hover:bg-amber-950/20 dark:hover:text-amber-400"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                      Help &amp; FAQ
                     </Link>
                   </div>
                 </>
@@ -178,11 +269,11 @@ export function TopBar() {
             {/* Sign out */}
             <Link
               href="/logout"
-              className="flex h-8 w-8 items-center justify-center rounded-xl text-stone-400 transition-colors hover:bg-rose-50 hover:text-rose-600 dark:text-stone-500 dark:hover:bg-rose-950/30 dark:hover:text-rose-400"
+              className="flex h-8 w-8 items-center justify-center rounded-xl text-stone-400 transition-all hover:bg-rose-50 hover:text-rose-600 dark:text-stone-500 dark:hover:bg-rose-950/30 dark:hover:text-rose-400"
               title="Sign out"
               aria-label="Sign out"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+              <SignOutIcon />
             </Link>
           </div>
         </div>

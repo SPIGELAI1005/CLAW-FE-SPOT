@@ -67,8 +67,10 @@ interface Pulse {
 
 export default function ClawfeAnimatedBackground({
   config,
+  canvasClassName,
 }: {
   config?: ClawfeBgConfig;
+  canvasClassName?: string;
 }) {
   const cfg = { ...DEFAULTS, ...config };
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -298,8 +300,8 @@ export default function ClawfeAnimatedBackground({
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 0 }}
+      className={canvasClassName ?? "fixed inset-0 pointer-events-none"}
+      style={canvasClassName ? undefined : { zIndex: 0 }}
       aria-hidden="true"
     />
   );

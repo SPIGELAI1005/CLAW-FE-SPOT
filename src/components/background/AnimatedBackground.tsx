@@ -18,6 +18,10 @@ interface AnimatedBackgroundProps {
   minimal?: boolean;
   /** Config passed to the atmosphere layer */
   config?: ClawfeBgConfig;
+  /** Override the default "fixed inset-0" canvas positioning */
+  canvasClassName?: string;
+  /** Compact mode — fewer tables, no auditor station, sized to parent */
+  compact?: boolean;
 }
 
 /**
@@ -31,11 +35,13 @@ interface AnimatedBackgroundProps {
 export function AnimatedBackground({
   minimal = false,
   config,
+  canvasClassName,
+  compact = false,
 }: AnimatedBackgroundProps) {
   return (
     <>
-      <ClawfeAnimatedBackground config={config} />
-      {!minimal && <SpotTableVisualization />}
+      <ClawfeAnimatedBackground config={config} canvasClassName={canvasClassName} />
+      {!minimal && <SpotTableVisualization canvasClassName={canvasClassName} compact={compact} />}
     </>
   );
 }
