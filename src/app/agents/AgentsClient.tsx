@@ -14,7 +14,7 @@ interface AgentsResponse {
 
 export function AgentsClient() {
   const [search, setSearch] = useState("");
-  const { data, isLoading } = useFetch<AgentsResponse>("/api/agents");
+  const { data, isLoading, error } = useFetch<AgentsResponse>("/api/agents");
 
   const agents: Agent[] = (data?.agents ?? []).map(mapDbAgent) as Agent[];
 
@@ -46,6 +46,11 @@ export function AgentsClient() {
             <div key={i} className="h-48 animate-pulse rounded-2xl bg-stone-100 dark:bg-stone-800" />
           ))}
         </div>
+      ) : error ? (
+        <EmptyState
+          title="Could not load agents"
+          description={error}
+        />
       ) : filtered.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((agent) => (

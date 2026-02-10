@@ -31,7 +31,7 @@ interface InboxResponse {
 
 export function InboxClient() {
   const [filter, setFilter] = useState<InboxFilter>("all");
-  const { data, isLoading, refetch } = useFetch<InboxResponse>("/api/inbox");
+  const { data, isLoading, error, refetch } = useFetch<InboxResponse>("/api/inbox");
 
   const items: InboxItem[] = (data?.items ?? []).map(mapDbInboxItem) as InboxItem[];
   const pendingCount = items.filter((i) => i.status === "pending").length;
@@ -74,6 +74,11 @@ export function InboxClient() {
             <div key={i} className="h-20 animate-pulse rounded-2xl bg-stone-100 dark:bg-stone-800" />
           ))}
         </div>
+      ) : error ? (
+        <EmptyState
+          title="Could not load inbox"
+          description={error}
+        />
       ) : filtered.length > 0 ? (
         <div className="space-y-3">
           {filtered.map((item) => (

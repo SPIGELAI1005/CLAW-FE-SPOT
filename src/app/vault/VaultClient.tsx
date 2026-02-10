@@ -28,7 +28,7 @@ interface VaultResponse {
 
 export function VaultClient() {
   const [search, setSearch] = useState("");
-  const { data, isLoading } = useFetch<VaultResponse>("/api/vault");
+  const { data, isLoading, error } = useFetch<VaultResponse>("/api/vault");
 
   const entries = data?.entries ?? [];
 
@@ -72,6 +72,11 @@ export function VaultClient() {
             <div key={i} className="h-20 animate-pulse rounded-2xl bg-stone-100 dark:bg-stone-800" />
           ))}
         </div>
+      ) : error ? (
+        <EmptyState
+          title="Could not load audit vault"
+          description={error}
+        />
       ) : filtered.length > 0 ? (
         <div className="space-y-3">
           {filtered.map((entry) => (
