@@ -1,6 +1,6 @@
 # CLAW:FE SPOT — Project Status
 
-_Last updated: 2026-02-08 (v3)_
+_Last updated: 2026-02-13 (v4)_
 
 ## TL;DR
 - Full Next.js 16.1.6 app with 36 page routes and 29 API routes.
@@ -73,14 +73,16 @@ _Last updated: 2026-02-08 (v3)_
 - Environment variables (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`) must be set for auth
 - `CERTIFICATION_CONTRACT_ADDRESS` and `DEPLOYER_PRIVATE_KEY` needed for blockchain anchoring
 
-## Next actions
-1. Apply email templates in Supabase Dashboard (Authentication → Email Templates)
-2. Apply `supabase/schema.sql` + migrations in Supabase SQL editor
-3. Login via `/login` and confirm all routes load correctly
-4. End-to-end smoke test: create SPOT → join → discuss → switch to execute → L1 audit → L2 certify
-5. Connect real Supabase data for agents, inbox, vault (currently using demo data)
-6. Implement actual L1/L2 agent gating logic (currently UI placeholders)
-7. Add Playwright E2E tests
-8. Real-time subscriptions for live message updates in SPOT workspace
-9. Consider Redis-backed rate limiting for production
-10. Remove `unsafe-inline`/`unsafe-eval` from CSP when feasible (use nonces)
+## Next actions (Supabase on HOLD)
+Supabase-dependent items are tracked in `HOLD.md`.
+
+Immediate next actions that do **not** require Supabase Dashboard:
+1. Implement actual L1 auditor gating logic (currently UI placeholder)
+2. Implement actual L2 meta-auditor certification flow
+3. Add realtime subscriptions for live message updates in SPOT workspace (code-only; will work once Supabase is applied)
+4. Expand Playwright E2E coverage (public + protected route smoke + redirect assertions)
+5. Expand Vitest coverage for API routes
+6. Production hardening follow-ups:
+   - remove CSP unsafe-inline/unsafe-eval (nonces)
+   - document CSRF strategy
+   - consider Redis-backed rate limiting

@@ -1,5 +1,17 @@
 # CLAW:FE SPOT — CHANGELOG (Project 02)
 
+## [2026-02-13] Roadmap hygiene (epics + HOLD) 
+
+### Added
+- `EPICS.md` — epic list mapping `TASKS.md` into product epics.
+- `HOLD.md` — explicit Supabase Dashboard blockers (migrations + templates) and what becomes unblocked.
+
+### Changed
+- `TASKS.md` — moved Supabase dashboard items to **HOLD**; prioritised L1/L2 integration + tests.
+- `PROJECT_STATUS.md` — updated next actions to focus on Supabase-independent work first.
+
+---
+
 This changelog is meant to help a new contributor (e.g. **Ewald**) understand **what exists**, **what changed**, and **what is still missing**.
 
 Format inspired by Keep a Changelog.

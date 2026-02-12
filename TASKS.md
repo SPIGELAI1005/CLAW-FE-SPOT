@@ -84,14 +84,19 @@ Legend: **NOW** / NEXT / LATER / DONE
 
 ## NOW
 
-### cf-100 Supabase data integration
-- [ ] cf-100a Connect real Supabase data for agents (currently demo data)
-- [ ] cf-100b Connect real Supabase data for inbox
-- [ ] cf-100c Connect real Supabase data for vault
+### cf-120 L1/L2 Agent integration (Supabase-independent work first)
+- [ ] cf-120a Implement actual L1 auditor gating logic (currently UI placeholder)
+- [ ] cf-120b Implement actual L2 meta-auditor certification flow
+- [ ] cf-120c Real-time subscriptions for live message updates
+
+### cf-130 Testing (expand)
+- [x] cf-130a Playwright E2E test suite scaffold (see `e2e/` + `playwright.config.ts`)
+- [ ] cf-130a2 Expand Playwright: public + protected route smoke + auth redirect assertions
+- [ ] cf-130b Expand Vitest coverage for API routes
+
+### cf-100 / cf-110 (HOLD — requires Supabase Dashboard)
 - [ ] cf-100d Apply schema + migrations to Supabase SQL editor
 - [ ] cf-100e Apply email templates in Supabase Dashboard
-
-### cf-110 Smoke testing
 - [ ] cf-110a End-to-end: create SPOT → join → discuss → switch to execute → L1 audit → L2 certify
 - [ ] cf-110b Verify all routes load correctly with auth
 
